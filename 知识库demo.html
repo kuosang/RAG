@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>知识库demo</title>
+  <style>
+    :root {
+      --primary: #1f6feb;
+      --primary-soft: #e7f0ff;
+      --bg: #f6f8fb;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --card: #ffffff;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .container { width: min(1200px, 92%); margin: 32px auto 64px; }
+    header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+    }
+    header h1 { margin: 0 0 8px; font-size: 28px; }
+    header p { margin: 0; color: var(--muted); }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .tag {
+      background: var(--primary-soft);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+    .section {
+      margin-top: 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .section h2 { margin: 0 0 10px; font-size: 20px; }
+    .section h3 { margin: 0 0 8px; font-size: 16px; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .anchor-list { display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px; }
+    .anchor-list a { color: var(--primary); text-decoration: none; background: var(--primary-soft); padding: 4px 10px; border-radius: 999px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .card strong { display: block; margin-bottom: 6px; }
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .btn.ghost { background: #fff; color: var(--primary); border-color: var(--primary); }
+    .input {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 13px;
+      min-width: 180px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border: 1px solid var(--border); padding: 8px; text-align: left; }
+    th { background: #f8fafc; }
+    .divider { height: 1px; background: var(--border); margin: 14px 0; }
+    .hidden { display: none !important; }
+
+    .demo-console .demo-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .control-block { border: 1px dashed var(--border); border-radius: 12px; padding: 12px; background: #f8fafc; }
+    .pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 12px; cursor: pointer; }
+    .pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .flow-steps a { display: inline-block; margin: 4px 6px 4px 0; font-size: 12px; color: var(--primary); text-decoration: none; }
+    .slider-row { display: flex; align-items: center; gap: 10px; }
+    .slider-row input[type="range"] { width: 160px; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 6px; font-size: 11px; background: #e5f3ff; color: #1f6feb; }
+    .badge.warn { background: #fff4e5; color: #b45309; }
+    .demo-mqa { border: 1px dashed var(--border); border-radius: 10px; padding: 10px; background: #f8fafc; }
+    .demo-mqa-list { display: grid; gap: 6px; margin-top: 8px; }
+    .score-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: #fff; font-size: 12px; }
+    .score-row.is-active { border-color: #93c5fd; background: #eff6ff; }
+    .score-label { display: flex; gap: 8px; align-items: center; }
+    .score-value { font-weight: 600; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 999; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #fff; border-radius: 14px; max-width: 520px; width: 100%; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
+    .tab {
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .toolbar-left, .toolbar-right { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+    .status-pill { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border); background: #fff; }
+    .status-pill.published { background: #ecfdf3; color: #166534; border-color: #bbf7d0; }
+    .status-pill.pending { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+    .status-pill.draft { background: #f1f5f9; color: #334155; border-color: #e2e8f0; }
+    .status-pill.offline { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+
+    .split { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
+    .split-left, .split-right { display: grid; gap: 12px; }
+
+    .list { display: grid; gap: 8px; }
+    .list-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+      cursor: pointer;
+      display: grid;
+      gap: 4px;
+    }
+    .list-item.active { border-color: #93c5fd; background: #eff6ff; }
+
+    .kv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 13px; }
+    .kv-grid div { background: #f8fafc; border-radius: 10px; padding: 8px 10px; border: 1px dashed var(--border); }
+
+    .task-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .task-col { border: 1px dashed var(--border); border-radius: 12px; padding: 10px; background: #f8fafc; }
+    .task-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 8px; margin-top: 8px; }
+
+    .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .metric { border: 1px solid var(--border); border-radius: 12px; padding: 10px; background: #fff; font-size: 13px; }
+
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: none; align-items: stretch; justify-content: flex-end; z-index: 999; }
+    .drawer-overlay.active { display: flex; }
+    .drawer { width: min(520px, 92vw); background: #fff; padding: 16px; box-shadow: var(--shadow); border-left: 1px solid var(--border); display: grid; grid-template-rows: auto 1fr; }
+    .drawer-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .drawer-body { overflow-y: auto; padding-top: 10px; }
+
+    @media (max-width: 980px) {
+      .grid-2, .grid-3, .demo-console .demo-controls, .split, .task-board, .metric-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>知识库demo（内部 Agent 调试闭环）</h1>
+      <p>可点击的交互 demo，用于展示“录入—审核—检索—调试—引用—反馈—维护”的完整闭环。</p>
+      <div class="meta-row">
+        <span class="tag">内部 Agent 使用优先</span>
+        <span class="tag">MQA 阈值可调</span>
+        <span class="tag">多知识库切换/迁移</span>
+        <span class="tag">批量导入/导出</span>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>页面索引</h2>
+      <div class="anchor-list">
+        <a href="#demo-console">Demo 控制台</a>
+        <a href="#admin">管理后台</a>
+        <a href="#ops">知识运营工作台</a>
+        <a href="#debug">检索调试台</a>
+        <a href="#biz">业务使用端</a>
+        <a href="#agent">Agent 集成端</a>
+      </div>
+    </section>
+
+    <section class="section demo-console" id="demo-console">
+      <h2>交互 Demo 控制台</h2>
+      <p class="muted">演示角色切换、MQA 阈值匹配、关键弹窗与页面跳转。</p>
+      <div class="demo-controls">
+        <div class="control-block">
+          <h3>角色与视图</h3>
+          <div class="pill-group" data-role-group>
+            <button class="pill active" data-role="ai" type="button">AI 产品经理</button>
+            <button class="pill" data-role="admin" type="button">平台管理员</button>
+            <button class="pill" data-role="ops" type="button">知识运营</button>
+            <button class="pill" data-role="owner" type="button">业务负责人</button>
+          </div>
+          <p class="muted">当前角色：<span id="demo-role">AI 产品经理</span></p>
+          <label class="muted"><input type="checkbox" id="toggle-biz" /> 展示业务使用端</label>
+        </div>
+        <div class="control-block">
+          <h3>核心链路</h3>
+          <div class="flow-steps">
+            <a href="#ops">知识录入</a>
+            <a href="#ops">审核发布</a>
+            <a href="#debug">Query 调试</a>
+            <a href="#debug">召回验证</a>
+            <a href="#agent">Agent 绑定</a>
+            <a href="#agent">Workflow 节点</a>
+            <a href="#agent">调用监控</a>
+            <a href="#ops">维护闭环</a>
+          </div>
+          <p class="muted">点击节点可跳转到对应页面框架。</p>
+        </div>
+        <div class="control-block">
+          <h3>MQA 阈值匹配</h3>
+          <div class="slider-row">
+            <span class="badge">阈值</span>
+            <input id="mqa-threshold" type="range" min="0.5" max="0.95" step="0.01" value="0.72" />
+            <span id="mqa-value" class="score-value">0.72</span>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            <input class="input" id="mqa-query" placeholder="输入提问，例如：如何重置密码？" />
+            <button class="btn primary" id="mqa-run" type="button">运行测试</button>
+          </div>
+          <div class="demo-mqa" style="margin-top:10px;">
+            <div class="muted">当前问题：<span id="mqa-question">如何重置密码？</span></div>
+            <div class="muted">可引用答案数：<span id="mqa-count">2</span></div>
+            <div class="demo-mqa-list" id="mqa-list">
+              <div class="score-row" data-score="0.89">
+                <div class="score-label"><span class="badge">标准答案</span> 重置密码流程（SOP-账号）</div>
+                <div class="score-value">0.89</div>
+              </div>
+              <div class="score-row" data-score="0.76">
+                <div class="score-label"><span class="badge">产品说明</span> 账号安全与密码策略</div>
+                <div class="score-value">0.76</div>
+              </div>
+              <div class="score-row" data-score="0.71">
+                <div class="score-label"><span class="badge warn">FAQ</span> 忘记密码怎么办</div>
+                <div class="score-value">0.71</div>
+              </div>
+              <div class="score-row" data-score="0.62">
+                <div class="score-label"><span class="badge warn">边缘说明</span> 安全问题设置</div>
+                <div class="score-value">0.62</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="grid-2">
+        <div class="control-block">
+          <h3>关键操作演示</h3>
+          <div class="card">
+            <button class="btn primary" data-open-modal="create" type="button">新建知识</button>
+            <button class="btn ghost" data-open-modal="bind" type="button">Agent 绑定</button>
+            <button class="btn" data-open-modal="maintain" type="button">指派维护任务</button>
+          </div>
+          <p class="muted">用于模拟抽屉/弹窗交互，无需后端。</p>
+        </div>
+        <div class="control-block">
+          <h3>当前状态</h3>
+          <div class="card">
+            <div><strong>角色</strong>：<span id="state-role">AI 产品经理</span></div>
+            <div><strong>阈值</strong>：<span id="state-threshold">0.72</span></div>
+            <div><strong>可引用数</strong>：<span id="state-count">2</span></div>
+          </div>
+          <p class="muted" id="state-tip">阈值越高，Agent 回答越偏向标准答案。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="admin" data-domain="admin">
+      <h2>管理后台</h2>
+      <p class="muted">用于平台底座、空间与权限治理。</p>
+      <div class="grid-3">
+        <div class="card">
+          <strong>知识空间管理</strong>
+          - 新建/编辑/归档
+          <br/>- 多产品知识库切换/迁移
+          <br/>- 空间负责人/权限
+        </div>
+        <div class="card">
+          <strong>模型与检索策略配置</strong>
+          - Embedding/Rerank
+          <br/>- 检索策略模板
+          <br/>- 阈值默认策略
+        </div>
+        <div class="card">
+          <strong>审计与安全</strong>
+          - 操作记录
+          <br/>- 权限审计
+          <br/>- 合规配置
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ops" data-domain="ops">
+      <h2>知识运营工作台</h2>
+      <p class="muted">负责知识生产、审核与维护闭环（支持批量导入/导出与任务追踪）。</p>
+
+      <div class="tabs" data-tab-group="ops">
+        <button class="tab active" data-tab="ops-my" type="button">我的知识</button>
+        <button class="tab" data-tab="ops-create" type="button">新建知识</button>
+        <button class="tab" data-tab="ops-import" type="button">导入中心</button>
+        <button class="tab" data-tab="ops-review" type="button">审核中心</button>
+        <button class="tab" data-tab="ops-version" type="button">版本与发布</button>
+        <button class="tab" data-tab="ops-maintain" type="button">维护中心</button>
+        <button class="tab" data-tab="ops-feedback" type="button">反馈处理</button>
+        <button class="tab" data-tab="ops-quality" type="button">质量分析</button>
+      </div>
+
+      <div class="panel active" data-tab-panel="ops-my">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <input class="input" placeholder="搜索标题 / 标签 / 空间" />
+            <select class="input">
+              <option>全部空间</option>
+              <option>产品知识库</option>
+              <option>客服知识库</option>
+              <option>运营知识库</option>
+            </select>
+            <div class="pill-group">
+              <button class="pill active" type="button">全部</button>
+              <button class="pill" type="button">草稿</button>
+              <button class="pill" type="button">待审核</button>
+              <button class="pill" type="button">已发布</button>
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn" type="button">批量操作</button>
+            <button class="btn" type="button">批量导出</button>
+            <button class="btn primary" data-open-modal="create" type="button">新建知识</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>标题</th><th>类型</th><th>状态</th><th>空间</th><th>负责人</th><th>更新时间</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>账号重置流程</td>
+              <td>FAQ</td>
+              <td><span class="status-pill published">已发布</span></td>
+              <td>客服知识库</td>
+              <td>张琳</td>
+              <td>2026-03-12</td>
+              <td>
+                <button class="btn ghost" data-open-drawer="knowledge" data-title="账号重置流程" data-status="已发布" data-owner="张琳" data-version="v3" data-score="0.89" type="button">查看</button>
+              </td>
+            </tr>
+            <tr>
+              <td>订单退款规则</td>
+              <td>规则</td>
+              <td><span class="status-pill pending">待审核</span></td>
+              <td>产品知识库</td>
+              <td>李可</td>
+              <td>2026-03-11</td>
+              <td>
+                <button class="btn" data-open-modal="review" type="button">去审核</button>
+              </td>
+            </tr>
+            <tr>
+              <td>版本发布 checklist</td>
+              <td>SOP</td>
+              <td><span class="status-pill draft">草稿</span></td>
+              <td>运营知识库</td>
+              <td>陈希</td>
+              <td>2026-03-10</td>
+              <td>
+                <button class="btn ghost" data-open-drawer="knowledge" data-title="版本发布 checklist" data-status="草稿" data-owner="陈希" data-version="v1" data-score="0.62" type="button">编辑</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel" data-tab-panel="ops-create">
+        <div class="split">
+          <div class="split-left">
+            <div class="card">
+              <strong>模板选择</strong>
+              <div class="pill-group">
+                <button class="pill active" type="button">FAQ 模板</button>
+                <button class="pill" type="button">SOP 模板</button>
+                <button class="pill" type="button">规则模板</button>
+                <button class="pill" type="button">产品说明</button>
+              </div>
+              <p class="muted">模板决定字段与审核流程。</p>
+            </div>
+            <div class="card">
+              <strong>正文内容</strong>
+              <input class="input" placeholder="标题" />
+              <input class="input" placeholder="摘要" />
+              <input class="input" placeholder="正文（支持 Markdown / 富文本）" />
+            </div>
+          </div>
+          <div class="split-right">
+            <div class="card">
+              <strong>结构化字段</strong>
+              <div class="kv-grid">
+                <div>知识空间：客服知识库</div>
+                <div>分类：账号 / 权限</div>
+                <div>标签：#账号 #安全</div>
+                <div>责任人：张琳</div>
+              </div>
+              <div class="divider"></div>
+              <div class="toolbar-right">
+                <button class="btn" type="button">保存草稿</button>
+                <button class="btn primary" data-open-modal="review" type="button">提交审核</button>
+              </div>
+            </div>
+            <div class="card">
+              <strong>校验提示</strong>
+              <p class="muted">缺少“生效时间”与“来源链接”，发布前需补齐。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" data-tab-panel="ops-import">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <span class="muted">支持 Word / PDF / Excel / Markdown</span>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn" type="button">导出模板</button>
+            <button class="btn primary" data-open-modal="import" type="button">上传文件</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>任务名称</th><th>类型</th><th>状态</th><th>创建人</th><th>时间</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>客服 FAQ 批量导入</td><td>Excel</td><td><span class="status-pill published">已完成</span></td><td>王晨</td><td>2026-03-09</td><td><button class="btn" type="button">查看报告</button></td></tr>
+            <tr><td>产品说明更新</td><td>Word</td><td><span class="status-pill pending">处理中</span></td><td>林晓</td><td>2026-03-10</td><td><button class="btn" type="button">查看进度</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel" data-tab-panel="ops-review">
+        <div class="grid-2">
+          <div class="card">
+            <strong>待审核列表</strong>
+            <ul class="muted">
+              <li>订单退款规则（产品知识库）</li>
+              <li>账号解锁流程（客服知识库）</li>
+              <li>售前答疑模板（运营知识库）</li>
+            </ul>
+            <button class="btn" data-open-modal="review" type="button">进入审核</button>
+          </div>
+          <div class="card">
+            <strong>审核详情</strong>
+            <p class="muted">展示版本差异、字段缺失与风险提示。</p>
+            <div class="toolbar-right">
+              <button class="btn" type="button">退回修改</button>
+              <button class="btn primary" type="button">审核通过</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" data-tab-panel="ops-version">
+        <table>
+          <thead>
+            <tr><th>知识</th><th>版本</th><th>发布人</th><th>发布时间</th><th>状态</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>账号重置流程</td><td>v3</td><td>张琳</td><td>2026-03-12</td><td><span class="status-pill published">已发布</span></td><td><button class="btn" type="button">版本对比</button></td></tr>
+            <tr><td>订单退款规则</td><td>v2</td><td>李可</td><td>2026-03-11</td><td><span class="status-pill pending">待发布</span></td><td><button class="btn" type="button">发布</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel" data-tab-panel="ops-maintain">
+        <div class="task-board">
+          <div class="task-col">
+            <strong>待处理</strong>
+            <div class="task-card">低命中：发票开具规则 <button class="btn" data-open-modal="maintain" type="button">指派</button></div>
+            <div class="task-card">过期：账号安全策略</div>
+          </div>
+          <div class="task-col">
+            <strong>处理中</strong>
+            <div class="task-card">负反馈：退款流程 <span class="badge warn">48h</span></div>
+          </div>
+          <div class="task-col">
+            <strong>已完成</strong>
+            <div class="task-card">优化：客服 FAQ 目录</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" data-tab-panel="ops-feedback">
+        <table>
+          <thead>
+            <tr><th>来源</th><th>问题</th><th>反馈</th><th>状态</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Agent 调用</td><td>退款规则</td><td>回答不完整</td><td><span class="status-pill pending">待处理</span></td><td><button class="btn" data-open-modal="maintain" type="button">转维护</button></td></tr>
+            <tr><td>业务端</td><td>账号解锁</td><td>引用过旧版本</td><td><span class="status-pill pending">待处理</span></td><td><button class="btn" type="button">标记处理中</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel" data-tab-panel="ops-quality">
+        <div class="metric-grid">
+          <div class="metric"><strong>命中率</strong><br/>78%</div>
+          <div class="metric"><strong>引用率</strong><br/>61%</div>
+          <div class="metric"><strong>负反馈率</strong><br/>4.2%</div>
+          <div class="metric"><strong>过期知识</strong><br/>23 条</div>
+        </div>
+        <div class="divider"></div>
+        <table>
+          <thead>
+            <tr><th>空间</th><th>低命中率</th><th>零结果率</th><th>建议动作</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>客服知识库</td><td>21%</td><td>8%</td><td>补充 FAQ / 优化标签</td></tr>
+            <tr><td>产品知识库</td><td>18%</td><td>5%</td><td>更新规则版本</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="debug" data-domain="debug">
+      <h2>检索调试台</h2>
+      <p class="muted">面向 AI 产品经理的调试与阈值验证页面。</p>
+      <div class="grid-2">
+        <div class="card">
+          <strong>Query 测试</strong>
+          <p class="muted">选择 Agent / 空间 / 策略，输入 Query 后运行测试。</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <input class="input" placeholder="输入 Query" />
+            <button class="btn primary">运行</button>
+          </div>
+        </div>
+        <div class="card">
+          <strong>召回结果摘要</strong>
+          <ul class="muted">
+            <li>命中数量 / 响应时长</li>
+            <li>召回来源分布</li>
+            <li>过滤原因统计</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="biz" data-domain="biz">
+      <h2>业务使用端</h2>
+      <p class="muted">面向内部员工与业务使用者。</p>
+      <div class="card">
+        <strong>搜索结果页</strong>
+        <p class="muted">展示命中片段、来源与反馈入口。</p>
+      </div>
+    </section>
+
+    <section class="section" id="agent" data-domain="agent">
+      <h2>Agent 集成端</h2>
+      <p class="muted">面向 Agent 绑定、策略配置与调用监控，支持 Workflow 节点调用。</p>
+
+      <div class="split">
+        <div class="split-left">
+          <div class="card">
+            <strong>Agent 列表</strong>
+            <div class="toolbar-left" style="margin-top:8px;">
+              <input class="input" placeholder="搜索 Agent" />
+              <button class="btn" type="button">新建 Agent</button>
+            </div>
+          </div>
+          <div class="list" data-agent-list>
+            <div class="list-item active" data-agent-item data-name="客服助手" data-desc="面向客服同学的高频问答助手" data-owner="AI 产品经理" data-space="客服知识库" data-policy="混合检索 + 阈值" data-status="运行中">
+              <strong>客服助手</strong>
+              <span class="muted">绑定：客服知识库</span>
+              <span class="muted">状态：运行中</span>
+            </div>
+            <div class="list-item" data-agent-item data-name="运营Copilot" data-desc="支撑活动运营与文案问答" data-owner="知识运营" data-space="运营知识库" data-policy="语义检索 + 阈值" data-status="运行中">
+              <strong>运营Copilot</strong>
+              <span class="muted">绑定：运营知识库</span>
+              <span class="muted">状态：运行中</span>
+            </div>
+            <div class="list-item" data-agent-item data-name="产品顾问" data-desc="面向产品线内部知识检索" data-owner="平台管理员" data-space="产品知识库" data-policy="混合检索 + 强过滤" data-status="待发布">
+              <strong>产品顾问</strong>
+              <span class="muted">绑定：产品知识库</span>
+              <span class="muted">状态：待发布</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="split-right">
+          <div class="card">
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <strong id="agent-name">客服助手</strong>
+                <span id="agent-status" class="status-pill published">运行中</span>
+              </div>
+              <div class="toolbar-right">
+                <button class="btn" type="button">保存配置</button>
+                <button class="btn primary" type="button">发布配置</button>
+              </div>
+            </div>
+            <p class="muted" id="agent-desc">面向客服同学的高频问答助手</p>
+            <div class="kv-grid">
+              <div>负责人：<span id="agent-owner">AI 产品经理</span></div>
+              <div>绑定空间：<span id="agent-space">客服知识库</span></div>
+              <div>当前策略：<span id="agent-policy">混合检索 + 阈值</span></div>
+              <div>最近发布：2026-03-12</div>
+            </div>
+
+            <div class="tabs" data-tab-group="agent">
+              <button class="tab active" data-tab="agent-bind" type="button">知识绑定</button>
+              <button class="tab" data-tab="agent-policy" type="button">策略配置</button>
+              <button class="tab" data-tab="agent-workflow" type="button">Workflow 节点</button>
+              <button class="tab" data-tab="agent-monitor" type="button">调用监控</button>
+              <button class="tab" data-tab="agent-api" type="button">API / Key</button>
+            </div>
+
+            <div class="panel active" data-tab-panel="agent-bind">
+              <div class="grid-2">
+                <div class="card">
+                  <strong>可绑定知识空间</strong>
+                  <div class="pill-group">
+                    <button class="pill active" type="button">客服知识库</button>
+                    <button class="pill" type="button">产品知识库</button>
+                    <button class="pill" type="button">运营知识库</button>
+                  </div>
+                  <p class="muted">支持多空间切换与迁移。</p>
+                </div>
+                <div class="card">
+                  <strong>绑定配置</strong>
+                  <div class="kv-grid">
+                    <div>知识类型：FAQ / SOP</div>
+                    <div>标签过滤：#账号 #退款</div>
+                    <div>引用字段：标题 / 来源 / 版本</div>
+                    <div>权限继承：空间级</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" data-tab-panel="agent-policy">
+              <div class="grid-2">
+                <div class="card">
+                  <strong>检索策略</strong>
+                  <div class="pill-group">
+                    <button class="pill active" type="button">混合检索</button>
+                    <button class="pill" type="button">语义检索</button>
+                    <button class="pill" type="button">全文检索</button>
+                  </div>
+                  <p class="muted">TopK = 6，重排开启。</p>
+                </div>
+                <div class="card">
+                  <strong>MQA 阈值</strong>
+                  <div class="slider-row">
+                    <span class="badge">阈值</span>
+                    <input id="agent-threshold" type="range" min="0.5" max="0.95" step="0.01" value="0.78" />
+                    <span id="agent-threshold-value" class="score-value">0.78</span>
+                  </div>
+                  <p class="muted">阈值越高，Agent 回答越偏向标准答案。</p>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div class="card">
+                <strong>引用展示配置</strong>
+                <div class="kv-grid">
+                  <div>展示字段：标题 / 来源 / 更新时间</div>
+                  <div>证据链：开启</div>
+                  <div>低分兜底：提示人工确认</div>
+                  <div>日志采样：10%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" data-tab-panel="agent-workflow">
+              <table>
+                <thead>
+                  <tr><th>节点</th><th>调用策略</th><th>输入字段</th><th>状态</th><th>操作</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>知识检索节点</td><td>混合检索 + 阈值</td><td>query / user_intent</td><td><span class="status-pill published">生效中</span></td><td><button class="btn" type="button">配置</button></td></tr>
+                  <tr><td>答案润色节点</td><td>引用优先</td><td>answer / citation</td><td><span class="status-pill draft">草稿</span></td><td><button class="btn" type="button">预览</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="panel" data-tab-panel="agent-monitor">
+              <div class="metric-grid">
+                <div class="metric"><strong>调用量</strong><br/>12,430</div>
+                <div class="metric"><strong>命中率</strong><br/>79%</div>
+                <div class="metric"><strong>引用率</strong><br/>62%</div>
+                <div class="metric"><strong>失败率</strong><br/>3.1%</div>
+              </div>
+              <div class="divider"></div>
+              <table>
+                <thead>
+                  <tr><th>时间</th><th>Query</th><th>命中数</th><th>状态</th><th>操作</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>10:20</td><td>如何重置密码？</td><td>3</td><td><span class="status-pill published">成功</span></td><td><button class="btn" type="button">查看链路</button></td></tr>
+                  <tr><td>10:18</td><td>退款多久到账</td><td>1</td><td><span class="status-pill pending">低分</span></td><td><button class="btn" type="button">调试</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="panel" data-tab-panel="agent-api">
+              <div class="card">
+                <strong>API Key</strong>
+                <p class="muted">Key：<span id="agent-key">kb_demo_9x8g***</span></p>
+                <div class="toolbar-right">
+                  <button class="btn" id="copy-key" type="button">复制 Key</button>
+                  <button class="btn" type="button">重置 Key</button>
+                </div>
+              </div>
+              <div class="card">
+                <strong>接口示例</strong>
+                <p class="muted">POST /rag/query（支持 mqa_threshold 参数）</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-overlay" data-modal="create">
+    <div class="modal">
+      <h3>新建知识</h3>
+      <p class="muted">模拟新建知识弹窗，展示模板选择与草稿保存流程。</p>
+      <div class="card">
+        <input class="input" placeholder="标题" />
+        <input class="input" placeholder="所属空间" />
+        <span class="tag">FAQ 模板</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" data-close-modal type="button">取消</button>
+        <button class="btn primary" type="button">保存草稿</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" data-modal="bind">
+    <div class="modal">
+      <h3>Agent 绑定配置</h3>
+      <p class="muted">模拟绑定知识空间与策略，体现阈值控制与策略发布。</p>
+      <div class="card">
+        <input class="input" placeholder="Agent 名称" />
+        <input class="input" placeholder="绑定空间" />
+        <span class="tag">策略：混合检索 + 阈值</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" data-close-modal type="button">取消</button>
+        <button class="btn primary" type="button">保存发布</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" data-modal="maintain">
+    <div class="modal">
+      <h3>指派维护任务</h3>
+      <p class="muted">模拟维护任务指派与截止时间设置。</p>
+      <div class="card">
+        <input class="input" placeholder="责任人" />
+        <input class="input" placeholder="截止时间" />
+        <span class="tag">原因：低命中 / 负反馈</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" data-close-modal type="button">取消</button>
+        <button class="btn primary" type="button">确认指派</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" data-modal="import">
+    <div class="modal">
+      <h3>批量导入</h3>
+      <p class="muted">上传文件并映射字段，完成预校验后进入导入队列。</p>
+      <div class="card">
+        <input class="input" placeholder="选择文件（示例：faq.xlsx）" />
+        <input class="input" placeholder="选择模板（FAQ/规则/SOP）" />
+        <span class="tag">预校验：通过</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" data-close-modal type="button">取消</button>
+        <button class="btn primary" type="button">开始导入</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" data-modal="review">
+    <div class="modal">
+      <h3>审核操作</h3>
+      <p class="muted">填写审核意见并选择发布或退回。</p>
+      <div class="card">
+        <input class="input" placeholder="审核意见" />
+        <span class="tag">差异提示：字段缺失 2 处</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" data-close-modal type="button">退回修改</button>
+        <button class="btn primary" type="button">通过发布</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" data-drawer="knowledge">
+    <div class="drawer">
+      <div class="drawer-header">
+        <h3 id="drawer-title">知识详情</h3>
+        <button class="btn" data-close-drawer type="button">关闭</button>
+      </div>
+      <div class="drawer-body">
+        <div class="kv-grid">
+          <div>状态：<span id="drawer-status">已发布</span></div>
+          <div>负责人：<span id="drawer-owner">张琳</span></div>
+          <div>版本：<span id="drawer-version">v3</span></div>
+          <div>匹配分数：<span id="drawer-score">0.89</span></div>
+        </div>
+        <div class="divider"></div>
+        <p class="muted">这里展示知识内容摘要、来源链接与历史版本记录（模拟）。</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const roleLabels = {
+      ai: "AI 产品经理",
+      admin: "平台管理员",
+      ops: "知识运营",
+      owner: "业务负责人"
+    };
+    const roleDomains = {
+      ai: ["debug", "agent", "ops", "admin"],
+      admin: ["admin", "ops", "debug", "agent"],
+      ops: ["ops", "admin", "debug"],
+      owner: ["ops", "debug", "agent"]
+    };
+
+    const roleGroup = document.querySelector("[data-role-group]");
+    const roleButtons = roleGroup ? roleGroup.querySelectorAll(".pill") : [];
+    const roleLabel = document.getElementById("demo-role");
+    const stateRole = document.getElementById("state-role");
+    const toggleBiz = document.getElementById("toggle-biz");
+    const domainSections = document.querySelectorAll("section[data-domain]");
+
+    let currentRole = "ai";
+
+    function applyRole(roleKey) {
+      currentRole = roleKey;
+      const label = roleLabels[roleKey] || "AI 产品经理";
+      if (roleLabel) roleLabel.textContent = label;
+      if (stateRole) stateRole.textContent = label;
+
+      const allowed = new Set(roleDomains[roleKey] || []);
+      if (toggleBiz && toggleBiz.checked) {
+        allowed.add("biz");
+      }
+
+      domainSections.forEach((section) => {
+        const domain = section.dataset.domain;
+        section.classList.toggle("hidden", !allowed.has(domain));
+      });
+    }
+
+    roleButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        roleButtons.forEach((item) => item.classList.remove("active"));
+        btn.classList.add("active");
+        applyRole(btn.dataset.role || "ai");
+      });
+    });
+
+    if (toggleBiz) {
+      toggleBiz.addEventListener("change", () => applyRole(currentRole));
+    }
+
+    const thresholdInput = document.getElementById("mqa-threshold");
+    const mqaValue = document.getElementById("mqa-value");
+    const mqaQuestion = document.getElementById("mqa-question");
+    const mqaCount = document.getElementById("mqa-count");
+    const stateThreshold = document.getElementById("state-threshold");
+    const stateCount = document.getElementById("state-count");
+    const mqaRows = document.querySelectorAll("#mqa-list .score-row");
+    const mqaRun = document.getElementById("mqa-run");
+    const mqaQueryInput = document.getElementById("mqa-query");
+
+    function updateMQA() {
+      if (!thresholdInput) return;
+      const threshold = parseFloat(thresholdInput.value);
+      if (mqaValue) mqaValue.textContent = threshold.toFixed(2);
+      if (stateThreshold) stateThreshold.textContent = threshold.toFixed(2);
+
+      let count = 0;
+      mqaRows.forEach((row) => {
+        const score = parseFloat(row.dataset.score || "0");
+        const active = score >= threshold;
+        row.classList.toggle("is-active", active);
+        if (active) count += 1;
+      });
+
+      if (mqaCount) mqaCount.textContent = String(count);
+      if (stateCount) stateCount.textContent = String(count);
+    }
+
+    if (thresholdInput) {
+      thresholdInput.addEventListener("input", updateMQA);
+    }
+
+    if (mqaRun) {
+      mqaRun.addEventListener("click", () => {
+        if (mqaQueryInput && mqaQuestion && mqaQueryInput.value.trim()) {
+          mqaQuestion.textContent = mqaQueryInput.value.trim();
+        }
+        updateMQA();
+      });
+    }
+
+    const openButtons = document.querySelectorAll("[data-open-modal]");
+    const closeButtons = document.querySelectorAll("[data-close-modal]");
+    const overlays = document.querySelectorAll(".modal-overlay");
+
+    openButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.openModal;
+        const overlay = document.querySelector(`.modal-overlay[data-modal="${target}"]`);
+        if (overlay) overlay.classList.add("active");
+      });
+    });
+
+    closeButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const overlay = btn.closest(".modal-overlay");
+        if (overlay) overlay.classList.remove("active");
+      });
+    });
+
+    overlays.forEach((overlay) => {
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) {
+          overlay.classList.remove("active");
+        }
+      });
+    });
+
+    applyRole("ai");
+    updateMQA();
+  </script>
+</body>
+</html>
