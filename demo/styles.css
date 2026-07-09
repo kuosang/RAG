@@ -242,8 +242,7 @@ button { cursor: pointer; }
 .triple-grid,
 .metric-grid,
 .config-grid,
-.preview-grid,
-.console-grid {
+.preview-grid {
   display: grid;
   gap: 14px;
 }
@@ -254,7 +253,6 @@ button { cursor: pointer; }
 .triple-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .config-grid { grid-template-columns: 1.2fr .8fr; }
 .preview-grid { grid-template-columns: 1fr 1fr; }
-.console-grid { grid-template-columns: 1.12fr .88fr; }
 
 .kpi-card,
 .card,
@@ -263,10 +261,7 @@ button { cursor: pointer; }
 .workflow-card,
 .list-item,
 .preview-pane,
-.activity-item,
-.result-card,
-.history-item,
-.check-item {
+.activity-item {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -427,8 +422,6 @@ tr.is-selected td { background: rgba(59,130,246,0.05); }
 .tab-panel.active { display: block; }
 .stage-panel { display: none; }
 .stage-panel.active { display: block; }
-.env-panel { display: none; }
-.env-panel.active { display: block; }
 
 .timeline {
   display: grid;
@@ -471,45 +464,31 @@ tr.is-selected td { background: rgba(59,130,246,0.05); }
   gap: 10px;
 }
 
-.list,
-.result-stack,
-.history-list,
-.check-list,
-.topic-list {
+.list {
   display: grid;
   gap: 10px;
 }
-.list-item,
-.result-card {
+.list-item {
   cursor: pointer;
   transition: .2s ease;
 }
 .list-item:hover,
-.list-item.active,
-.result-card:hover,
-.result-card.active {
+.list-item.active {
   border-color: rgba(59,130,246,0.36);
   background: rgba(59,130,246,0.06);
 }
-.list-item .title-row,
-.result-card .title-row {
+.list-item .title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
-.list-item .meta-row,
-.result-card .meta-row {
+.list-item .meta-row {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   color: var(--text-soft);
   font-size: 12px;
-}
-.result-card .snippet {
-  color: var(--text-soft);
-  line-height: 1.6;
-  font-size: 13px;
 }
 
 .inline-kv,
@@ -546,9 +525,7 @@ tr.is-selected td { background: rgba(59,130,246,0.05); }
   gap: 10px;
 }
 .score-item,
-.activity-item,
-.history-item,
-.check-item {
+.activity-item {
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -581,27 +558,6 @@ tr.is-selected td { background: rgba(59,130,246,0.05); }
   padding-left: 12px;
   color: var(--text-soft);
 }
-.note-box {
-  border: 1px dashed var(--line-strong);
-  border-radius: 18px;
-  background: #f8fbff;
-  padding: 14px;
-}
-.search-composer {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 10px;
-  align-items: center;
-}
-.empty-note {
-  display: none;
-  padding: 14px 16px;
-  border: 1px dashed var(--line-strong);
-  border-radius: 16px;
-  background: #f8fbff;
-  color: var(--text-soft);
-}
-.empty-note.show { display: block; }
 
 .floating-note {
   position: fixed;
@@ -686,7 +642,7 @@ tr.is-selected td { background: rgba(59,130,246,0.05); }
 
 .quick-links {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
   margin-top: 20px;
 }
@@ -701,11 +657,11 @@ tr.is-selected td { background: rgba(59,130,246,0.05); }
 .link-card p { color: var(--text-soft); line-height: 1.6; }
 
 @media (max-width: 1200px) {
-  .kpi-grid, .metric-grid, .card-grid, .quick-links, .triple-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi-grid, .metric-grid, .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 1024px) {
-  .layout, .config-grid, .split-stage, .console-grid { grid-template-columns: 1fr; }
+  .layout, .config-grid, .split-stage { grid-template-columns: 1fr; }
   .sidebar { position: static; }
 }
 
@@ -713,5 +669,5 @@ tr.is-selected td { background: rgba(59,130,246,0.05); }
   .page-shell { width: min(100vw, calc(100vw - 24px)); margin: 12px auto 42px; }
   .hero, .panel, .sidebar, .link-card { padding: 18px; border-radius: 22px; }
   .kpi-grid, .metric-grid, .card-grid, .dual-grid, .triple-grid, .kv-grid, .preview-grid, .quick-links, .kanban { grid-template-columns: 1fr; }
-  .form-grid, .search-composer { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
 }

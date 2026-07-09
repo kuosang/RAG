@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>业务使用端原型</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="consumer-portal">
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <span class="hero-badge">业务使用端 · 知识消费端</span>
+          <h1>业务使用端</h1>
+          <p>聚焦知识消费体验：首页 / 搜索入口、分类导航、搜索结果、知识详情、FAQ 专题、我的收藏、反馈与纠错、最近浏览。页面模拟业务同学或一线坐席在使用知识平台时的真实操作路径，并与运营侧反馈处理形成闭环。</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#results">查看搜索结果</a>
+            <button class="btn ghost" data-open-modal="consumer-feedback" type="button">提交反馈</button>
+            <a class="btn soft" href="./Demo控制台（总入口）.html">返回 Demo 控制台</a>
+          </div>
+          <div class="tag-row">
+            <span class="tag">首页搜索</span>
+            <span class="tag">分类导航</span>
+            <span class="tag">知识详情</span>
+            <span class="tag">收藏 / 反馈 / 最近浏览</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <strong>消费导航</strong>
+          <span>用于演示业务侧如何查询、查看、收藏和反馈知识</span>
+        </div>
+        <nav class="side-nav">
+          <a class="nav-link active" href="#home"><span>首页 / 搜索入口</span><span class="nav-kpi">1</span></a>
+          <a class="nav-link" href="#categories"><span>分类导航</span><span class="nav-kpi">4</span></a>
+          <a class="nav-link" href="#results"><span>搜索结果</span><span class="nav-kpi">5</span></a>
+          <a class="nav-link" href="#detail"><span>知识详情</span><span class="nav-kpi">1</span></a>
+          <a class="nav-link" href="#topics"><span>FAQ 专题</span><span class="nav-kpi">3</span></a>
+          <a class="nav-link" href="#assets"><span>收藏 / 最近浏览</span><span class="nav-kpi">4</span></a>
+          <a class="nav-link" href="#feedback"><span>反馈与纠错</span><span class="nav-kpi">3</span></a>
+        </nav>
+        <div class="side-card">
+          <strong>使用提醒</strong>
+          <div class="muted">- 先用搜索入口找答案</div>
+          <div class="muted">- 再从详情页决定收藏或反馈</div>
+          <div class="muted">- 最近浏览会自动沉淀</div>
+          <button class="btn tiny primary" data-open-modal="consumer-feedback" type="button">快速反馈</button>
+        </div>
+      </aside>
+
+      <section class="content">
+        <section class="panel" id="home">
+          <div class="panel-header">
+            <div>
+              <h2>首页 / 搜索入口</h2>
+              <div class="panel-subtitle">支持按关键词和分类快速检索；下方结果区与知识详情区会联动更新。</div>
+            </div>
+            <div class="metric-row">
+              <span class="badge success">已收藏 <span id="consume-fav-count">2</span></span>
+              <span class="badge info">当前场景：业务咨询</span>
+            </div>
+          </div>
+          <div class="search-composer">
+            <input class="input" id="consume-search" value="退款" placeholder="搜索问题、流程、规则或 FAQ" />
+            <button class="btn primary" id="consume-search-btn" type="button">搜索</button>
+            <button class="btn soft" data-open-modal="consumer-feedback" type="button">反馈问题</button>
+          </div>
+          <div class="pill-group" style="margin-top:14px;">
+            <button class="pill active" data-consume-category="all" type="button">全部</button>
+            <button class="pill" data-consume-category="refund" type="button">退款</button>
+            <button class="pill" data-consume-category="account" type="button">账号</button>
+            <button class="pill" data-consume-category="invoice" type="button">发票</button>
+            <button class="pill" data-consume-category="activity" type="button">活动</button>
+          </div>
+        </section>
+
+        <section class="panel" id="categories">
+          <div class="panel-header">
+            <div>
+              <h2>分类导航</h2>
+              <div class="panel-subtitle">展示高频知识入口，适合在不知道准确关键词时通过分类快速进入。</div>
+            </div>
+          </div>
+          <div class="card-grid">
+            <article class="card"><div class="card-title"><strong>退款与售后</strong><span class="badge warning">高频</span></div><div class="muted">到账时效、活动订单退款、异常退款、售后范围。</div></article>
+            <article class="card"><div class="card-title"><strong>账号与安全</strong><span class="badge success">稳定</span></div><div class="muted">密码重置、身份核验、MFA、登录异常处理。</div></article>
+            <article class="card"><div class="card-title"><strong>发票与财税</strong><span class="badge info">更新中</span></div><div class="muted">发票抬头、专票普票、税率说明和开票流程。</div></article>
+          </div>
+        </section>
+
+        <section class="panel" id="results">
+          <div class="panel-header">
+            <div>
+              <h2>搜索结果</h2>
+              <div class="panel-subtitle">点击任一结果，右侧知识详情会同步切换；支持分类 + 关键词联动筛选。</div>
+            </div>
+          </div>
+          <div class="split-stage">
+            <div class="result-stack">
+              <article class="result-card active" data-consume-item data-id="refund" data-title="退款多久到账" data-category="退款与售后" data-category-key="refund" data-source="客服知识库" data-updated="2026-03-19 08:42" data-summary="标准答案：原路退款预计 1-3 个工作日到账，活动订单可能延长至 5 个工作日；银行卡异常需转财务复核。">
+                <div class="title-row"><strong>退款多久到账</strong><span class="status success">标准答案</span></div>
+                <div class="meta-row"><span>退款与售后</span><span>客服知识库</span><span>更新于 08:42</span></div>
+                <div class="snippet">原路退款 1-3 个工作日到账，活动订单可能延长至 5 个工作日。</div>
+              </article>
+              <article class="result-card" data-consume-item data-id="account" data-title="账号忘记密码怎么办" data-category="账号与安全" data-category-key="account" data-source="客服知识库" data-updated="2026-03-19 10:12" data-summary="可通过手机号 + MFA 完成密码重置；若身份核验失败，需转人工工单处理。">
+                <div class="title-row"><strong>账号忘记密码怎么办</strong><span class="status success">热门</span></div>
+                <div class="meta-row"><span>账号与安全</span><span>客服知识库</span><span>更新于 10:12</span></div>
+                <div class="snippet">支持手机号验证、MFA 校验和异常登录兜底流程。</div>
+              </article>
+              <article class="result-card" data-consume-item data-id="invoice" data-title="发票抬头可以修改吗" data-category="发票与财税" data-category-key="invoice" data-source="财税知识库" data-updated="2026-03-18 17:40" data-summary="发票未开具前可修改抬头；已开票场景需要提交工单申请处理。">
+                <div class="title-row"><strong>发票抬头可以修改吗</strong><span class="status info">专题</span></div>
+                <div class="meta-row"><span>发票与财税</span><span>财税知识库</span><span>更新于 17:40</span></div>
+                <div class="snippet">根据发票状态区分修改路径，并附带工单入口说明。</div>
+              </article>
+              <article class="result-card" data-consume-item data-id="activity" data-title="活动订单退款规则" data-category="活动规则" data-category-key="activity" data-source="产品知识库" data-updated="2026-03-19 09:20" data-summary="活动订单退款需先确认优惠券、预售、赠品等特殊场景，部分情况下不支持秒退。">
+                <div class="title-row"><strong>活动订单退款规则</strong><span class="status warning">需细读</span></div>
+                <div class="meta-row"><span>活动规则</span><span>产品知识库</span><span>更新于 09:20</span></div>
+                <div class="snippet">规则边界较多，建议结合标准 FAQ 与规则详情一起阅读。</div>
+              </article>
+              <article class="result-card" data-consume-item data-id="shipping" data-title="促销发货时效说明" data-category="活动规则" data-category-key="activity" data-source="运营知识库" data-updated="2026-03-17 14:28" data-summary="活动期间发货时效可能延长，具体以活动页公告和物流状态为准。">
+                <div class="title-row"><strong>促销发货时效说明</strong><span class="status info">说明类</span></div>
+                <div class="meta-row"><span>活动规则</span><span>运营知识库</span><span>更新于 14:28</span></div>
+                <div class="snippet">适合在大促期间快速回答物流和履约时效问题。</div>
+              </article>
+            </div>
+            <article class="card" id="detail">
+              <div class="card-title"><strong>知识详情</strong><span class="badge info">结果联动</span></div>
+              <div class="kv-grid">
+                <div class="kv-box"><label>标题</label><div id="consume-detail-title">退款多久到账</div></div>
+                <div class="kv-box"><label>分类</label><div id="consume-detail-category">退款与售后</div></div>
+                <div class="kv-box"><label>来源</label><div id="consume-detail-source">客服知识库</div></div>
+                <div class="kv-box"><label>更新时间</label><div id="consume-detail-updated">2026-03-19 08:42</div></div>
+              </div>
+              <div class="preview-answer" style="margin-top:12px;">
+                <strong>摘要</strong>
+                <div id="consume-detail-summary">标准答案：原路退款预计 1-3 个工作日到账，活动订单可能延长至 5 个工作日；银行卡异常需转财务复核。</div>
+                <blockquote>该区域模拟业务端查看知识详情时的正文摘要和可引用口径。</blockquote>
+              </div>
+              <div class="drawer-actions">
+                <button class="btn soft" id="consume-favorite-btn" type="button">取消收藏</button>
+                <button class="btn primary" data-open-modal="consumer-feedback" type="button">反馈与纠错</button>
+              </div>
+            </article>
+          </div>
+          <div class="empty-note" id="consume-empty-note" style="margin-top:12px;">当前筛选条件下没有结果，建议切换分类或修改关键词。</div>
+        </section>
+
+        <section class="panel" id="topics">
+          <div class="panel-header">
+            <div>
+              <h2>FAQ 专题</h2>
+              <div class="panel-subtitle">用于快速切入高频主题，点击按钮会自动回填搜索框并刷新结果。</div>
+            </div>
+          </div>
+          <div class="topic-list">
+            <button class="btn soft" data-topic-fill="退款" type="button">退款 FAQ 专题</button>
+            <button class="btn soft" data-topic-fill="账号" type="button">账号与安全专题</button>
+            <button class="btn soft" data-topic-fill="发票" type="button">发票与财税专题</button>
+          </div>
+        </section>
+
+        <section class="panel" id="assets">
+          <div class="panel-header">
+            <div>
+              <h2>我的收藏 / 最近浏览</h2>
+              <div class="panel-subtitle">展示业务侧沉淀的高频资产，方便反复复用和回访。</div>
+            </div>
+          </div>
+          <div class="dual-grid">
+            <article class="card">
+              <div class="card-title"><strong>我的收藏</strong><span class="badge success">实时更新</span></div>
+              <div class="activity-list" id="favorite-list"></div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>最近浏览</strong><span class="badge info">自动沉淀</span></div>
+              <div class="history-list" id="consume-recent-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="feedback">
+          <div class="panel-header">
+            <div>
+              <h2>反馈与纠错</h2>
+              <div class="panel-subtitle">将业务端发现的问题回传给知识运营侧，形成闭环优化。</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>问题</th><th>最近反馈</th><th>处理状态</th><th>责任方</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>活动订单退款规则</td><td>说明不够完整，缺少“秒退限制”提示</td><td><span class="status warning">已转运营</span></td><td>知识运营</td></tr>
+                <tr><td>发票抬头可以修改吗</td><td>希望补充工单入口链接</td><td><span class="status info">处理中</span></td><td>财税团队</td></tr>
+                <tr><td>账号忘记密码怎么办</td><td>MFA 说明需要更清楚</td><td><span class="status success">已修复</span></td><td>客服知识库</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <div class="modal-overlay" data-modal="consumer-feedback">
+    <div class="modal">
+      <h3>提交反馈与纠错</h3>
+      <div class="panel-subtitle">模拟业务侧将问题直接回传给运营侧，作为知识优化输入。</div>
+      <div class="form-grid" style="margin-top:14px;">
+        <div><input class="input" value="活动订单退款规则" /></div>
+        <div><select class="select"><option>问题类型：内容不完整</option><option>问题类型：引用错误</option></select></div>
+        <div class="full"><textarea class="textarea">建议补充“活动订单不支持秒退”的明确提示，并增加与 FAQ 的联动入口。</textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn soft" data-close-modal type="button">取消</button>
+        <button class="btn primary" id="submit-feedback" type="button">提交反馈</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-note" id="floating-note"></div>
+  <script src="./app.js"></script>
+</body>
+</html>

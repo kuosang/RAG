@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>知识运营工作台原型</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="ops-workbench">
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <span class="hero-badge">知识运营工作台 · 生产治理端</span>
+          <h1>知识运营工作台</h1>
+          <p>用于演示知识从草稿创建、批量导入、审核发布，到维护闭环和质量分析的全链路。这里单独抽出运营视角，避免直接在原 `知识库demo.html` 上堆叠复杂交互。</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#overview">查看首页看板</a>
+            <button class="btn ghost" id="simulate-create" type="button">模拟新建知识</button>
+            <a class="btn soft" href="./Agent集成端（接入编排端）.html">切到 Agent 集成端</a>
+          </div>
+          <div class="tag-row">
+            <span class="tag">工作台首页</span>
+            <span class="tag">我的知识列表</span>
+            <span class="tag">新建知识 / 审核 / 发布</span>
+            <span class="tag">维护中心 / 反馈处理 / 质量分析</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <strong>运营导航</strong>
+          <span>聚焦生产治理侧的任务闭环与节奏管理</span>
+        </div>
+        <nav class="side-nav">
+          <a class="nav-link active" href="#overview"><span>工作台首页</span><span class="nav-kpi">4</span></a>
+          <a class="nav-link" href="#knowledge"><span>我的知识列表</span><span class="nav-kpi">86</span></a>
+          <a class="nav-link" href="#create"><span>新建知识</span><span class="nav-kpi">3</span></a>
+          <a class="nav-link" href="#import"><span>导入中心</span><span class="nav-kpi">2</span></a>
+          <a class="nav-link" href="#review"><span>审核中心</span><span class="nav-kpi" id="pending-review-count">18</span></a>
+          <a class="nav-link" href="#version"><span>版本与发布</span><span class="nav-kpi">6</span></a>
+          <a class="nav-link" href="#maintenance"><span>维护中心</span><span class="nav-kpi">14</span></a>
+          <a class="nav-link" href="#feedback"><span>反馈处理</span><span class="nav-kpi">9</span></a>
+          <a class="nav-link" href="#quality"><span>质量分析</span><span class="nav-kpi">78%</span></a>
+        </nav>
+        <div class="side-card">
+          <strong>今日重点</strong>
+          <div class="muted">- 待审核规则 18 条</div>
+          <div class="muted">- 低命中知识 12 条</div>
+          <div class="muted">- 负反馈待转维护 5 条</div>
+          <button class="btn tiny primary" data-open-modal="assign-maintenance" type="button">快速指派维护</button>
+        </div>
+      </aside>
+
+      <section class="content">
+        <section class="panel" id="overview">
+          <div class="panel-header">
+            <div>
+              <h2>工作台首页</h2>
+              <div class="panel-subtitle">在一个面板里同步看运营产能、审核堵点、维护任务和知识质量，用于晨会与日常巡检。</div>
+            </div>
+            <div class="toolbar-right">
+              <div class="segmented">
+                <button class="active" type="button">今日</button>
+                <button type="button">本周</button>
+                <button type="button">本月</button>
+              </div>
+              <button class="btn soft" type="button">导出日报</button>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="status info">新增草稿</div>
+              <div class="kpi-value">27</div>
+              <div class="kpi-footnote">较昨日 +5，FAQ 模板占比最高</div>
+            </div>
+            <div class="kpi-card">
+              <div class="status warning">待审核</div>
+              <div class="kpi-value">18</div>
+              <div class="kpi-footnote">退款与账号类规则堆积明显</div>
+            </div>
+            <div class="kpi-card">
+              <div class="status success">已发布</div>
+              <div class="kpi-value">142</div>
+              <div class="kpi-footnote">发布成功率 96%，平均时长 5.4h</div>
+            </div>
+            <div class="kpi-card">
+              <div class="status danger">维护告警</div>
+              <div class="kpi-value">14</div>
+              <div class="kpi-footnote">低命中、过期、负反馈混合触发</div>
+            </div>
+          </div>
+          <div class="dual-grid" style="margin-top:14px;">
+            <article class="card">
+              <div class="card-title">
+                <strong>发布节奏</strong>
+                <span class="badge info">按流程分布</span>
+              </div>
+              <div class="timeline">
+                <div class="timeline-item">
+                  <div class="timeline-head"><strong>草稿补齐</strong><span class="timeline-meta">31 条</span></div>
+                  <div class="progress-bar"><span style="width: 72%;"></span></div>
+                  <div class="muted">字段缺失主要集中在来源链接与生效时间。</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-head"><strong>审核中</strong><span class="timeline-meta">18 条</span></div>
+                  <div class="progress-bar"><span style="width: 48%;"></span></div>
+                  <div class="muted">退款规则、开票流程等待业务确认。</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-head"><strong>待发布</strong><span class="timeline-meta">6 条</span></div>
+                  <div class="progress-bar"><span style="width: 24%;"></span></div>
+                  <div class="muted">今日 17:00 前完成灰度发布。</div>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <strong>高风险维护提醒</strong>
+                <span class="badge warning">需要分派</span>
+              </div>
+              <div class="activity-list">
+                <div class="activity-item"><div><strong>退款到账规则</strong><div class="muted">连续 2 天负反馈偏高</div></div><span class="status danger">48h</span></div>
+                <div class="activity-item"><div><strong>发票开具说明</strong><div class="muted">低命中率 29%，建议补 FAQ</div></div><span class="status warning">低命中</span></div>
+                <div class="activity-item"><div><strong>账号重置流程</strong><div class="muted">新版本已上线，旧文仍被引用</div></div><span class="status info">版本漂移</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="knowledge">
+          <div class="panel-header">
+            <div>
+              <h2>我的知识列表</h2>
+              <div class="panel-subtitle">支持按状态、关键字和空间快速筛选；点击表格行可联动右侧知识详情面板。</div>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn soft" type="button">批量导出</button>
+              <button class="btn primary" data-open-modal="create-knowledge" type="button">新建知识</button>
+            </div>
+          </div>
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <input class="input" id="knowledge-search" placeholder="搜索标题 / 标签 / 责任人" />
+              <select class="select">
+                <option>全部空间</option>
+                <option>客服知识库</option>
+                <option>产品知识库</option>
+                <option>运营知识库</option>
+              </select>
+              <div class="tabs">
+                <button class="tab active" data-status-filter="all" type="button">全部</button>
+                <button class="tab" data-status-filter="draft" type="button">草稿</button>
+                <button class="tab" data-status-filter="pending" type="button">待审</button>
+                <button class="tab" data-status-filter="published" type="button">已发布</button>
+              </div>
+            </div>
+          </div>
+          <div class="config-grid">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>标题</th><th>类型</th><th>状态</th><th>空间</th><th>负责人</th><th>更新时间</th><th>热度</th></tr>
+                </thead>
+                <tbody>
+                  <tr data-knowledge-row data-title="账号重置流程" data-score="0.91" data-status="已发布" data-status-key="published" data-owner="张琳" data-summary="标准 SOP，已绑定客服助手与 IT 服务 Agent，支持 MFA 分支流程。">
+                    <td>账号重置流程</td><td>FAQ / SOP</td><td><span class="status success">已发布</span></td><td>客服知识库</td><td>张琳</td><td>2026-03-19 10:12</td><td>高</td>
+                  </tr>
+                  <tr data-knowledge-row data-title="订单退款规则" data-score="0.74" data-status="待审核" data-status-key="pending" data-owner="李可" data-summary="涉及活动订单与预售商品的退款边界，当前等待法务补充限制条件。">
+                    <td>订单退款规则</td><td>规则</td><td><span class="status warning">待审核</span></td><td>产品知识库</td><td>李可</td><td>2026-03-19 09:20</td><td>中</td>
+                  </tr>
+                  <tr data-knowledge-row data-title="版本发布 checklist" data-score="0.62" data-status="草稿" data-status-key="draft" data-owner="陈希" data-summary="用于发布前巡检，当前尚未补充回滚方案与通知模板。">
+                    <td>版本发布 checklist</td><td>SOP</td><td><span class="status info">草稿</span></td><td>运营知识库</td><td>陈希</td><td>2026-03-18 20:03</td><td>低</td>
+                  </tr>
+                  <tr data-knowledge-row data-title="发票开具规则" data-score="0.58" data-status="待审核" data-status-key="pending" data-owner="顾萌" data-summary="低命中任务回流后重新修订，建议同步补充发票类型对照表。">
+                    <td>发票开具规则</td><td>FAQ</td><td><span class="status warning">待审核</span></td><td>客服知识库</td><td>顾萌</td><td>2026-03-18 17:40</td><td>中</td>
+                  </tr>
+                  <tr data-knowledge-row data-title="售前答疑模板" data-score="0.80" data-status="已发布" data-status-key="published" data-owner="王晨" data-summary="面向活动运营场景的标准答疑模板，已接入运营 Copilot。">
+                    <td>售前答疑模板</td><td>模板</td><td><span class="status success">已发布</span></td><td>运营知识库</td><td>王晨</td><td>2026-03-17 14:28</td><td>高</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <aside class="card">
+              <div class="card-title">
+                <strong>知识详情联动</strong>
+                <button class="btn tiny soft" data-open-drawer="knowledge-detail" data-title="账号重置流程" data-owner="张琳" data-score="0.91" data-status="已发布" type="button">打开抽屉</button>
+              </div>
+              <div class="kv-grid">
+                <div class="kv-box"><label>标题</label><div id="knowledge-detail-title">账号重置流程</div></div>
+                <div class="kv-box"><label>质量分</label><div id="knowledge-detail-score">0.91</div></div>
+                <div class="kv-box"><label>状态</label><div id="knowledge-detail-status">已发布</div></div>
+                <div class="kv-box"><label>负责人</label><div id="knowledge-detail-owner">张琳</div></div>
+              </div>
+              <div class="kv-box" style="margin-top:10px;">
+                <label>摘要</label>
+                <div id="knowledge-detail-summary">标准 SOP，已绑定客服助手与 IT 服务 Agent，支持 MFA 分支流程。</div>
+              </div>
+              <div class="metric-row" style="margin-top:14px;">
+                <span class="badge info">引用率 67%</span>
+                <span class="badge warning">待补充来源 2 项</span>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel" id="create" data-tab-root>
+          <div class="panel-header">
+            <div>
+              <h2>新建知识</h2>
+              <div class="panel-subtitle">按模板创建结构化知识，模拟运营提交审核前的字段补齐与预校验体验。</div>
+            </div>
+            <div class="tabs" data-tab-group>
+              <button class="tab active" data-tab-target="template" type="button">模板选择</button>
+              <button class="tab" data-tab-target="editing" type="button">正文编辑</button>
+              <button class="tab" data-tab-target="validate" type="button">预校验</button>
+            </div>
+          </div>
+          <div class="tab-panel active" data-tab-panel="template">
+            <div class="card-grid">
+              <article class="card">
+                <div class="card-title"><strong>FAQ 模板</strong><span class="badge success">推荐</span></div>
+                <div class="muted">适合高频问答，支持标准问法、别名问法、引用字段与快捷发布流。</div>
+              </article>
+              <article class="card">
+                <div class="card-title"><strong>SOP 模板</strong><span class="badge info">流程型</span></div>
+                <div class="muted">适合带步骤、前置条件与异常处理的流程知识。</div>
+              </article>
+              <article class="card">
+                <div class="card-title"><strong>规则模板</strong><span class="badge warning">需审核</span></div>
+                <div class="muted">适合退款、发票、权限等强约束规则，默认走多角色审核。</div>
+              </article>
+            </div>
+          </div>
+          <div class="tab-panel" data-tab-panel="editing">
+            <div class="form-grid">
+              <div><input class="input" value="退款到账时效说明" /></div>
+              <div><select class="select"><option>产品知识库</option><option>客服知识库</option></select></div>
+              <div><input class="input" value="#退款 #到账 #时效" /></div>
+              <div><input class="input" value="责任人：李可" /></div>
+              <div class="full"><textarea class="textarea">问题：退款多久可以到账？
+标准答案：原路退款预计 1-3 个工作日到账，活动订单可能延长至 5 个工作日。
+异常情况：银行卡状态异常时需联系财务复核。</textarea></div>
+            </div>
+          </div>
+          <div class="tab-panel" data-tab-panel="validate">
+            <div class="dual-grid">
+              <article class="card">
+                <div class="card-title"><strong>字段校验结果</strong><span class="badge warning">2 项待补充</span></div>
+                <div class="timeline">
+                  <div class="timeline-item"><strong>来源链接缺失</strong><div class="muted">建议补充财务系统公告链接。</div></div>
+                  <div class="timeline-item"><strong>生效时间缺失</strong><div class="muted">当前规则可能与 3 月促销政策冲突。</div></div>
+                </div>
+              </article>
+              <article class="card">
+                <div class="card-title"><strong>发布前动作</strong><span class="badge info">运营建议</span></div>
+                <div class="activity-list">
+                  <div class="activity-item"><div>保存草稿</div><button class="btn tiny soft" type="button">已保存</button></div>
+                  <div class="activity-item"><div>提交审核</div><button class="btn tiny primary" id="submit-review" type="button">提交</button></div>
+                  <div class="activity-item"><div>转专家复核</div><button class="btn tiny soft" type="button">发起</button></div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="import">
+          <div class="panel-header">
+            <div>
+              <h2>导入中心</h2>
+              <div class="panel-subtitle">用于批量导入 Word / PDF / Excel / Markdown，并展示模板映射、预校验和导入队列状态。</div>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn soft" type="button">导出模板</button>
+              <button class="btn primary" id="start-import" type="button">开始导入</button>
+            </div>
+          </div>
+          <div class="dual-grid">
+            <article class="card">
+              <div class="card-title"><strong>字段映射</strong><span class="badge info">Excel 批量 FAQ</span></div>
+              <div class="kv-grid">
+                <div class="kv-box"><label>标题列</label><div>question_title</div></div>
+                <div class="kv-box"><label>答案列</label><div>answer_text</div></div>
+                <div class="kv-box"><label>标签列</label><div>tag_group</div></div>
+                <div class="kv-box"><label>来源列</label><div>source_link</div></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>导入任务</strong><span class="badge success">实时队列</span></div>
+              <div class="activity-list">
+                <div class="activity-item"><div><strong>客服 FAQ 批量导入</strong><div class="muted">92 条，预校验通过</div></div><span class="status success">已完成</span></div>
+                <div class="activity-item"><div><strong>产品说明更新</strong><div class="muted">字段映射中，待人工确认</div></div><span class="status warning">处理中</span></div>
+                <div class="activity-item"><div><strong>促销规则补录</strong><div class="muted">解析失败 3 条，需下载错误报告</div></div><span class="status danger">异常</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="review">
+          <div class="panel-header">
+            <div>
+              <h2>审核中心</h2>
+              <div class="panel-subtitle">聚焦待审核知识、差异高亮、风险提示与发布决策。</div>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn soft" type="button">批量退回</button>
+              <button class="btn primary" type="button">批量通过</button>
+            </div>
+          </div>
+          <div class="dual-grid">
+            <article class="card">
+              <div class="card-title"><strong>待审核队列</strong><span class="badge warning">18 条</span></div>
+              <div class="timeline">
+                <div class="timeline-item">
+                  <div class="timeline-head"><strong>订单退款规则</strong><span class="timeline-meta">产品知识库 · 李可</span></div>
+                  <div class="muted">差异点：新增活动订单、预售场景和不可退范围说明。</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-head"><strong>账号解锁流程</strong><span class="timeline-meta">客服知识库 · 张琳</span></div>
+                  <div class="muted">风险提示：需确认 MFA 强校验是否对外放开。</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-head"><strong>发票开具规则</strong><span class="timeline-meta">客服知识库 · 顾萌</span></div>
+                  <div class="muted">来源链接更新，建议与财务口径同步复核。</div>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>审核详情</strong><span class="badge info">差异高亮</span></div>
+              <div class="preview-answer">
+                <strong>变更摘要</strong>
+                <div>新增“活动订单退款不支持秒退”的业务规则；补充到账时效的例外分支。</div>
+                <blockquote>风险：若业务公告与客服话术未同步，Agent 会引用旧版本，可能导致错误承诺。</blockquote>
+              </div>
+              <div class="drawer-actions">
+                <button class="btn soft" type="button">退回补充</button>
+                <button class="btn primary" type="button">审核通过</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="version" data-tab-root>
+          <div class="panel-header">
+            <div>
+              <h2>版本与发布中心</h2>
+              <div class="panel-subtitle">管理版本对比、发布波次、灰度状态与发布回滚提示。</div>
+            </div>
+            <div class="tabs" data-tab-group>
+              <button class="tab active" data-tab-target="release-list" type="button">版本列表</button>
+              <button class="tab" data-tab-target="release-plan" type="button">发布波次</button>
+            </div>
+          </div>
+          <div class="tab-panel active" data-tab-panel="release-list">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>知识</th><th>版本</th><th>发布人</th><th>发布时间</th><th>状态</th><th>说明</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>账号重置流程</td><td>v4</td><td>张琳</td><td>2026-03-19 11:00</td><td><span class="status success">灰度中</span></td><td>已同步客服助手与 IT Agent</td></tr>
+                  <tr><td>订单退款规则</td><td>v3</td><td>李可</td><td>2026-03-19 17:00</td><td><span class="status warning">待发布</span></td><td>等法务最终确认</td></tr>
+                  <tr><td>售前答疑模板</td><td>v2</td><td>王晨</td><td>2026-03-18 16:20</td><td><span class="status success">已发布</span></td><td>引用字段新增“版本号”</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="drawer-actions">
+              <button class="btn soft" type="button">查看版本对比</button>
+              <button class="btn primary" id="publish-version" type="button">发布当前版本</button>
+            </div>
+          </div>
+          <div class="tab-panel" data-tab-panel="release-plan">
+            <div class="triple-grid">
+              <article class="card"><div class="card-title"><strong>第 1 波</strong><span class="badge success">已完成</span></div><div class="muted">运营知识库，模板类知识，低风险快速发布。</div></article>
+              <article class="card"><div class="card-title"><strong>第 2 波</strong><span class="badge warning">进行中</span></div><div class="muted">客服 FAQ 与账号流程，关注旧版本引用回流。</div></article>
+              <article class="card"><div class="card-title"><strong>第 3 波</strong><span class="badge info">待开始</span></div><div class="muted">产品规则与政策类知识，需要业务签字后才能放量。</div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="maintenance">
+          <div class="panel-header">
+            <div>
+              <h2>维护中心</h2>
+              <div class="panel-subtitle">按照低命中、过期、负反馈等来源自动沉淀任务池，支持分派与 SLA 管理。</div>
+            </div>
+            <div class="segmented">
+              <button class="active" data-stage-view="task-pool" type="button">任务池</button>
+              <button data-stage-view="expire" type="button">过期知识</button>
+              <button data-stage-view="low-hit" type="button">低命中</button>
+            </div>
+          </div>
+          <div class="stage-panel active" data-stage-panel="task-pool">
+            <div class="kanban">
+              <div class="kanban-col">
+                <h4>待处理</h4>
+                <div class="workflow-card"><strong>发票开具规则</strong><div class="muted">低命中率 29%</div><button class="btn tiny primary" data-open-modal="assign-maintenance" type="button">指派</button></div>
+                <div class="workflow-card"><strong>账号安全策略</strong><div class="muted">版本过期 12 天</div></div>
+              </div>
+              <div class="kanban-col">
+                <h4>处理中</h4>
+                <div class="workflow-card"><strong>退款流程</strong><div class="muted">负反馈 17 条，知识专家处理中</div><span class="status warning">剩余 18h</span></div>
+              </div>
+              <div class="kanban-col">
+                <h4>已完成</h4>
+                <div class="workflow-card"><strong>客服 FAQ 目录</strong><div class="muted">已优化标签结构并重新发布</div><span class="status success">完成</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="stage-panel" data-stage-panel="expire">
+            <div class="card-grid">
+              <article class="card"><div class="card-title"><strong>账号安全策略</strong><span class="badge danger">已过期</span></div><div class="muted">需和安全团队同步 3 月最新 MFA 规则。</div></article>
+              <article class="card"><div class="card-title"><strong>促销发货时效</strong><span class="badge warning">7 天内过期</span></div><div class="muted">活动结束后需自动下线。</div></article>
+              <article class="card"><div class="card-title"><strong>开票税率说明</strong><span class="badge warning">待复核</span></div><div class="muted">受财税政策更新影响。</div></article>
+            </div>
+          </div>
+          <div class="stage-panel" data-stage-panel="low-hit">
+            <div class="card-grid">
+              <article class="card"><div class="card-title"><strong>退款到账 FAQ</strong><span class="badge warning">命中 54%</span></div><div class="muted">建议补充“活动订单”“银行卡异常”等别名问法。</div></article>
+              <article class="card"><div class="card-title"><strong>发票开具说明</strong><span class="badge warning">命中 48%</span></div><div class="muted">建议增加样例截图与标签。</div></article>
+              <article class="card"><div class="card-title"><strong>身份核验流程</strong><span class="badge warning">命中 51%</span></div><div class="muted">建议拆分为 FAQ + SOP 双形态。</div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="feedback">
+          <div class="panel-header">
+            <div>
+              <h2>反馈处理中心</h2>
+              <div class="panel-subtitle">将 Agent 调用反馈与业务端反馈汇总，支持一键转维护和责任归属判断。</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>来源</th><th>问题</th><th>反馈内容</th><th>状态</th><th>归因</th><th>动作</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Agent 调用</td><td>退款规则</td><td>回答不完整，未说明活动订单例外</td><td><span class="status warning">待处理</span></td><td>知识内容缺失</td><td><button class="btn tiny primary" data-open-modal="assign-maintenance" type="button">转维护</button></td></tr>
+                <tr><td>业务端</td><td>账号解锁</td><td>引用了旧版本流程</td><td><span class="status warning">待处理</span></td><td>发布同步延迟</td><td><button class="btn tiny soft" type="button">标记处理中</button></td></tr>
+                <tr><td>Agent 调用</td><td>发票类型</td><td>命中结果太少，建议补充标签</td><td><span class="status info">已分派</span></td><td>检索别名不足</td><td><button class="btn tiny soft" type="button">查看任务</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel" id="quality">
+          <div class="panel-header">
+            <div>
+              <h2>质量分析</h2>
+              <div class="panel-subtitle">展示命中率、引用率、负反馈率与零结果率，辅助运营决定补充知识还是优化标签 / 模板。</div>
+            </div>
+            <button class="btn soft" type="button">生成优化建议</button>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><strong>命中率</strong><div class="kpi-value" style="font-size:26px;">78%</div><div class="muted">客服空间较上周 +6%</div></div>
+            <div class="metric"><strong>引用率</strong><div class="kpi-value" style="font-size:26px;">61%</div><div class="muted">政策类知识引用偏低</div></div>
+            <div class="metric"><strong>负反馈率</strong><div class="kpi-value" style="font-size:26px;">4.2%</div><div class="muted">主要集中在退款与开票</div></div>
+            <div class="metric"><strong>过期知识</strong><div class="kpi-value" style="font-size:26px;">23</div><div class="muted">建议优先处理高热度内容</div></div>
+          </div>
+          <div class="dual-grid" style="margin-top:14px;">
+            <article class="card">
+              <div class="card-title"><strong>空间诊断</strong><span class="badge info">按空间</span></div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>空间</th><th>低命中率</th><th>零结果率</th><th>建议动作</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>客服知识库</td><td>21%</td><td>8%</td><td>补 FAQ、补别名问法</td></tr>
+                    <tr><td>产品知识库</td><td>18%</td><td>5%</td><td>更新规则版本与生效时间</td></tr>
+                    <tr><td>运营知识库</td><td>11%</td><td>3%</td><td>增强模板类知识引用字段</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>自动建议</strong><span class="badge success">可执行</span></div>
+              <div class="activity-list">
+                <div class="activity-item"><div><strong>补 3 条退款 FAQ</strong><div class="muted">补充活动订单、原路退回、异常到账说明</div></div><button class="btn tiny primary" type="button">采纳</button></div>
+                <div class="activity-item"><div><strong>拆分身份核验流程</strong><div class="muted">将流程说明拆成 FAQ + SOP，利于检索</div></div><button class="btn tiny soft" type="button">稍后</button></div>
+                <div class="activity-item"><div><strong>统一来源字段模板</strong><div class="muted">降低发布前字段缺失问题</div></div><button class="btn tiny primary" type="button">采纳</button></div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <div class="modal-overlay" data-modal="create-knowledge">
+    <div class="modal">
+      <h3>新建知识</h3>
+      <div class="panel-subtitle">模拟运营创建知识草稿，优先补齐模板、空间和责任人。</div>
+      <div class="form-grid" style="margin-top:14px;">
+        <div><input class="input" placeholder="标题" value="活动退款到账说明" /></div>
+        <div><select class="select"><option>产品知识库</option><option>客服知识库</option></select></div>
+        <div><select class="select"><option>规则模板</option><option>FAQ 模板</option></select></div>
+        <div><input class="input" placeholder="责任人" value="李可" /></div>
+        <div class="full"><textarea class="textarea">这里填写知识正文，支持示例问法、标准答案、限制条件和来源链接。</textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn soft" data-close-modal type="button">取消</button>
+        <button class="btn primary" id="create-knowledge-confirm" type="button">保存草稿</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" data-modal="assign-maintenance">
+    <div class="modal">
+      <h3>指派维护任务</h3>
+      <div class="panel-subtitle">把低命中、负反馈或过期知识转成明确任务，并设置责任人与 SLA。</div>
+      <div class="form-grid" style="margin-top:14px;">
+        <div><input class="input" value="发票开具规则" /></div>
+        <div><input class="input" value="负责人：顾萌" /></div>
+        <div><select class="select"><option>原因：低命中</option><option>原因：负反馈</option><option>原因：过期</option></select></div>
+        <div><input class="input" value="截止时间：2026-03-20 18:00" /></div>
+        <div class="full"><textarea class="textarea">补充发票类型、发票抬头与专票普票差异，并同步示例截图。</textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn soft" data-close-modal type="button">取消</button>
+        <button class="btn primary" data-close-modal type="button">确认指派</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" data-drawer="knowledge-detail">
+    <aside class="drawer">
+      <div class="drawer-header">
+        <h3 data-fill="title">知识详情</h3>
+        <button class="btn tiny soft" data-close-drawer type="button">关闭</button>
+      </div>
+      <div class="kv-grid">
+        <div class="kv-box"><label>负责人</label><div data-fill="owner">张琳</div></div>
+        <div class="kv-box"><label>质量分</label><div data-fill="score">0.91</div></div>
+        <div class="kv-box"><label>状态</label><div data-fill="status">已发布</div></div>
+        <div class="kv-box"><label>版本</label><div>v4</div></div>
+      </div>
+      <div class="card" style="margin-top:14px;">
+        <div class="card-title"><strong>知识摘要</strong><span class="badge info">联动预览</span></div>
+        <div class="muted">展示正文摘要、来源、绑定 Agent 与最近反馈，模拟运营从列表进入详情后的检查动作。</div>
+      </div>
+      <div class="card" style="margin-top:14px;">
+        <div class="card-title"><strong>最近动作</strong><span class="badge success">3 条</span></div>
+        <div class="timeline">
+          <div class="timeline-item"><strong>2026-03-19 11:00</strong><div class="muted">发布 v4，并同步客服助手灰度。</div></div>
+          <div class="timeline-item"><strong>2026-03-19 09:35</strong><div class="muted">补充 MFA 分支流程与失败兜底。</div></div>
+          <div class="timeline-item"><strong>2026-03-18 16:10</strong><div class="muted">收到 2 条 Agent 低分反馈。</div></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="floating-note" id="floating-note"></div>
+  <script src="./app.js"></script>
+</body>
+</html>

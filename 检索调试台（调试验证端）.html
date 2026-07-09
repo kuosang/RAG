@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>检索调试台原型</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="retrieval-debug">
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <span class="hero-badge">检索调试台 · 调试验证端</span>
+          <h1>检索调试台</h1>
+          <p>聚焦 Query 测试、召回结果、重排分析、引用链路、失败问题分析、评测集管理和评测结果，适合算法、调优和知识运营团队联动定位问题。页面包含 Query 运行、阈值联动、结果切换和失败场景切换等交互。</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#query">开始 Query 调试</a>
+            <a class="btn ghost" href="#failure">查看失败问题</a>
+            <a class="btn soft" href="./Demo控制台（总入口）.html">返回 Demo 控制台</a>
+          </div>
+          <div class="tag-row">
+            <span class="tag">Query 测试</span>
+            <span class="tag">召回 / 重排</span>
+            <span class="tag">引用链路</span>
+            <span class="tag">失败分析 / 评测</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <strong>调试导航</strong>
+          <span>用于调优检索策略、定位零结果和验证评测效果</span>
+        </div>
+        <nav class="side-nav">
+          <a class="nav-link active" href="#query"><span>Query 测试</span><span class="nav-kpi">1</span></a>
+          <a class="nav-link" href="#recall"><span>召回结果</span><span class="nav-kpi" data-debug-hit-count>3</span></a>
+          <a class="nav-link" href="#rerank"><span>重排分析</span><span class="nav-kpi">Top5</span></a>
+          <a class="nav-link" href="#citation"><span>引用链路</span><span class="nav-kpi">2</span></a>
+          <a class="nav-link" href="#failure"><span>失败分析</span><span class="nav-kpi">3</span></a>
+          <a class="nav-link" href="#evaluation"><span>评测集 / 结果</span><span class="nav-kpi">92%</span></a>
+        </nav>
+        <div class="side-card">
+          <strong>当前调试建议</strong>
+          <div class="muted">- 先跑一次默认 Query</div>
+          <div class="muted">- 再调阈值观察 Top 文档变化</div>
+          <div class="muted">- 最后到失败分析看回流原因</div>
+          <button class="btn tiny primary" id="run-eval" type="button">启动评测</button>
+        </div>
+      </aside>
+
+      <section class="content">
+        <section class="panel" id="query">
+          <div class="panel-header">
+            <div>
+              <h2>Query 测试</h2>
+              <div class="panel-subtitle">输入问题后运行一次完整调试，联动刷新召回、重排和引用链路视图。</div>
+            </div>
+            <div class="metric-row">
+              <span class="badge info">当前 Query：<span id="debug-query-echo">退款多久到账</span></span>
+              <span class="badge success">命中数：<span data-debug-hit-count>3</span></span>
+            </div>
+          </div>
+          <div class="search-composer">
+            <input class="input" id="debug-query" value="退款多久到账" placeholder="输入待调试 Query" />
+            <button class="btn primary" id="run-debug" type="button">运行调试</button>
+            <button class="btn soft" id="reset-debug" type="button">重置</button>
+          </div>
+          <div class="slider-row" style="margin-top:14px;">
+            <span class="badge info">召回阈值</span>
+            <input id="debug-threshold" type="range" min="0.55" max="0.92" step="0.01" value="0.72" />
+            <strong id="debug-threshold-value">0.72</strong>
+          </div>
+          <div class="preview-answer" id="debug-preview" style="margin-top:14px;">
+            <strong>Query 调试结论</strong>
+            <div>召回和重排结果稳定，适合展示带引用的标准答案。</div>
+            <blockquote>建议保留 Top 2 候选，并在回答区展示版本与更新时间。</blockquote>
+          </div>
+        </section>
+
+        <section class="panel" id="recall">
+          <div class="panel-header">
+            <div>
+              <h2>召回结果</h2>
+              <div class="panel-subtitle">点击任一候选文档，右侧会联动展示引用理由和证据链。</div>
+            </div>
+          </div>
+          <div class="split-stage">
+            <div class="result-stack">
+              <article class="result-card active" data-debug-doc data-score="0.91" data-title="退款到账规则 v3" data-reason="标题和正文同时命中“退款 / 到账 / 时效”，且版本最新。" data-citation="来源：财务规则中心 · 更新时间：2026-03-18 20:11 · 版本：v3">
+                <div class="title-row"><strong>退款到账规则 v3</strong><strong>0.91</strong></div>
+                <div class="meta-row"><span>规则</span><span>财务规则中心</span></div>
+                <div class="snippet">覆盖一般订单、活动订单和异常银行卡三类到账路径。</div>
+              </article>
+              <article class="result-card" data-debug-doc data-score="0.83" data-title="订单退款 FAQ" data-reason="命中了同义问法“多久到账”，FAQ 可补充说明标准口径。" data-citation="来源：客服知识库 · 更新时间：2026-03-19 08:42 · 版本：v5">
+                <div class="title-row"><strong>订单退款 FAQ</strong><strong>0.83</strong></div>
+                <div class="meta-row"><span>FAQ</span><span>客服知识库</span></div>
+                <div class="snippet">适合做最终回答文案，但规则覆盖深度略弱于政策类文档。</div>
+              </article>
+              <article class="result-card" data-debug-doc data-score="0.69" data-title="活动订单退款说明" data-reason="命中子场景“活动订单”，但热度较低、更新较旧。" data-citation="来源：活动规则库 · 更新时间：2026-03-02 12:20 · 版本：v1">
+                <div class="title-row"><strong>活动订单退款说明</strong><strong>0.69</strong></div>
+                <div class="meta-row"><span>规则</span><span>活动规则库</span></div>
+                <div class="snippet">如果阈值提高，该候选会被过滤掉。</div>
+              </article>
+              <article class="result-card" data-debug-doc data-score="0.58" data-title="支付异常排查 SOP" data-reason="只和“到账异常”弱相关，更适合作为兜底知识。" data-citation="来源：支付支持库 · 更新时间：2026-03-10 18:35 · 版本：v2">
+                <div class="title-row"><strong>支付异常排查 SOP</strong><strong>0.58</strong></div>
+                <div class="meta-row"><span>SOP</span><span>支付支持库</span></div>
+                <div class="snippet">低相关候选，适合被放在更靠后的位置。</div>
+              </article>
+            </div>
+            <article class="card" id="citation">
+              <div class="card-title"><strong>引用链路</strong><span class="badge info">联动预览</span></div>
+              <div class="kv-grid">
+                <div class="kv-box"><label>当前 Query</label><div id="debug-query-echo-secondary">退款多久到账</div></div>
+                <div class="kv-box"><label>主文档</label><div id="debug-doc-title">退款到账规则 v3</div></div>
+              </div>
+              <div class="note-box" style="margin-top:12px;">
+                <strong>为何被排到前面</strong>
+                <div class="muted" id="debug-doc-reason">标题和正文同时命中“退款 / 到账 / 时效”，且版本最新。</div>
+              </div>
+              <div class="preview-answer" style="margin-top:12px;">
+                <strong>证据链</strong>
+                <div id="debug-doc-citation">来源：财务规则中心 · 更新时间：2026-03-18 20:11 · 版本：v3</div>
+                <blockquote>如果业务端要求展示引用，可直接把来源、版本和更新时间一并返回。</blockquote>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="rerank">
+          <div class="panel-header">
+            <div>
+              <h2>重排分析</h2>
+              <div class="panel-subtitle">说明召回后如何结合版本、结构化程度和业务风险做二次排序。</div>
+            </div>
+          </div>
+          <div class="dual-grid">
+            <article class="card">
+              <div class="card-title"><strong>重排因子</strong><span class="badge warning">可解释</span></div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>文档</th><th>语义得分</th><th>版本权重</th><th>结构化权重</th><th>综合结果</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>退款到账规则 v3</td><td>0.91</td><td>高</td><td>高</td><td><span class="status success">Top1</span></td></tr>
+                    <tr><td>订单退款 FAQ</td><td>0.83</td><td>高</td><td>中</td><td><span class="status success">Top2</span></td></tr>
+                    <tr><td>活动订单退款说明</td><td>0.69</td><td>低</td><td>中</td><td><span class="status warning">Top3</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>调优结论</strong><span class="badge info">摘要</span></div>
+              <div class="preview-answer">
+                <strong>当前重排观察</strong>
+                <div id="debug-rerank-summary">当前重排后 Top 文档得分分布健康，FAQ 与规则文档形成互补。</div>
+                <blockquote>如果平台希望更保守，可在治理端提高默认阈值；如果希望扩召回，则建议补别名问法而不是直接放低风险规则。</blockquote>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="failure">
+          <div class="panel-header">
+            <div>
+              <h2>失败问题分析</h2>
+              <div class="panel-subtitle">切换不同失败类型，查看零结果、低分和引用缺失的常见根因。</div>
+            </div>
+            <div class="segmented">
+              <button class="active" data-debug-failure="zero" type="button">零结果</button>
+              <button data-debug-failure="low-score" type="button">低分命中</button>
+              <button data-debug-failure="citation-miss" type="button">引用缺失</button>
+            </div>
+          </div>
+          <div class="stage-panel active" data-debug-failure-panel="zero">
+            <div class="card-grid">
+              <article class="card"><div class="card-title"><strong>问题 1</strong><span class="badge danger">零结果</span></div><div class="muted">“发票抬头可以改吗” 没命中，原因是缺少“抬头修改”别名。</div></article>
+              <article class="card"><div class="card-title"><strong>问题 2</strong><span class="badge danger">零结果</span></div><div class="muted">“活动商品怎么退” 被拆词后未正确落到“活动订单退款说明”。</div></article>
+              <article class="card"><div class="card-title"><strong>建议</strong><span class="badge info">补知识</span></div><div class="muted">优先补别名问法，再校验标签、来源和发布时间。</div></article>
+            </div>
+          </div>
+          <div class="stage-panel" data-debug-failure-panel="low-score">
+            <div class="card-grid">
+              <article class="card"><div class="card-title"><strong>问题 1</strong><span class="badge warning">低分</span></div><div class="muted">“退款不到账怎么办” 只命中 FAQ，缺少异常路径规则文档。</div></article>
+              <article class="card"><div class="card-title"><strong>问题 2</strong><span class="badge warning">低分</span></div><div class="muted">“实名认证失败” 命中旧版本流程，最新版本权重不够高。</div></article>
+              <article class="card"><div class="card-title"><strong>建议</strong><span class="badge info">调策略</span></div><div class="muted">加强版本过滤和规则类权重，不建议直接降低阈值。</div></article>
+            </div>
+          </div>
+          <div class="stage-panel" data-debug-failure-panel="citation-miss">
+            <div class="card-grid">
+              <article class="card"><div class="card-title"><strong>问题 1</strong><span class="badge info">缺引用</span></div><div class="muted">文档正文有答案，但模板没要求填写来源字段。</div></article>
+              <article class="card"><div class="card-title"><strong>问题 2</strong><span class="badge info">缺引用</span></div><div class="muted">历史导入文档缺少版本号，无法在业务端稳定展示出处。</div></article>
+              <article class="card"><div class="card-title"><strong>建议</strong><span class="badge success">补模板</span></div><div class="muted">在管理后台统一加强模板字段约束，并在运营端补齐老文档。</div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="evaluation" data-tab-root>
+          <div class="panel-header">
+            <div>
+              <h2>评测集管理 / 评测结果</h2>
+              <div class="panel-subtitle">用于说明调试不是一次性的，需要用评测集持续追踪检索与回答质量。</div>
+            </div>
+            <div class="tabs" data-tab-group>
+              <button class="tab active" data-tab-target="eval-set" type="button">评测集管理</button>
+              <button class="tab" data-tab-target="eval-result" type="button">评测结果</button>
+            </div>
+          </div>
+          <div class="tab-panel active" data-tab-panel="eval-set">
+            <div class="dual-grid">
+              <article class="card">
+                <div class="card-title"><strong>评测集清单</strong><span class="badge success">3 组</span></div>
+                <div class="activity-list">
+                  <div class="activity-item"><div><strong>客服高频 FAQ</strong><div class="muted">覆盖退款、发票、账号、物流 120 题</div></div><span class="status success">已启用</span></div>
+                  <div class="activity-item"><div><strong>政策规则集</strong><div class="muted">覆盖活动与财务边界 86 题</div></div><span class="status info">灰度</span></div>
+                  <div class="activity-item"><div><strong>零结果回流集</strong><div class="muted">由线上失败问题自动沉淀</div></div><span class="status warning">待扩充</span></div>
+                </div>
+              </article>
+              <article class="card">
+                <div class="card-title"><strong>维护动作</strong><span class="badge info">持续更新</span></div>
+                <div class="timeline">
+                  <div class="timeline-item"><strong>导入失败问题</strong><div class="muted">每天自动将高频零结果导入候选评测集。</div></div>
+                  <div class="timeline-item"><strong>标注正确引用</strong><div class="muted">要求标明“正确答案 + 正确文档来源”。</div></div>
+                  <div class="timeline-item"><strong>绑定发布版本</strong><div class="muted">便于回看策略变更前后的效果差异。</div></div>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="tab-panel" data-tab-panel="eval-result">
+            <div class="metric-grid">
+              <div class="metric"><strong>召回准确率</strong><div class="kpi-value" style="font-size:26px;">92%</div><div class="muted">较上轮 +3%</div></div>
+              <div class="metric"><strong>引用完整率</strong><div class="kpi-value" style="font-size:26px;">88%</div><div class="muted">规则类仍有提升空间</div></div>
+              <div class="metric"><strong>零结果率</strong><div class="kpi-value" style="font-size:26px;">4.6%</div><div class="muted">主要是别名覆盖不足</div></div>
+              <div class="metric"><strong>平均耗时</strong><div class="kpi-value" style="font-size:26px;">1.3s</div><div class="muted">满足业务端体验要求</div></div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <div class="floating-note" id="floating-note"></div>
+  <script src="./app.js"></script>
+</body>
+</html>

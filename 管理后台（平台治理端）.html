@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理后台原型</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="admin-governance">
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <span class="hero-badge">管理后台 · 平台治理端</span>
+          <h1>管理后台</h1>
+          <p>聚焦平台治理能力：组织与角色权限、知识空间、分类标签词库、模板管理、数据源接入、模型与检索策略、通知集成、日志审计和系统设置。页面结构延续前两套原型的风格，但单独拆成平台治理端，方便独立演示。</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#overview">查看治理看板</a>
+            <button class="btn ghost" data-open-modal="create-space" type="button">新建知识空间</button>
+            <a class="btn soft" href="./Demo控制台（总入口）.html">返回 Demo 控制台</a>
+          </div>
+          <div class="tag-row">
+            <span class="tag">组织与权限</span>
+            <span class="tag">知识空间</span>
+            <span class="tag">模板 / 数据源</span>
+            <span class="tag">策略 / 审计 / 设置</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <strong>治理导航</strong>
+          <span>适合平台管理员与架构负责人快速巡检</span>
+        </div>
+        <nav class="side-nav">
+          <a class="nav-link active" href="#overview"><span>首页看板</span><span class="nav-kpi">9</span></a>
+          <a class="nav-link" href="#organization"><span>组织与角色权限</span><span class="nav-kpi">18</span></a>
+          <a class="nav-link" href="#spaces"><span>知识空间管理</span><span class="nav-kpi">12</span></a>
+          <a class="nav-link" href="#taxonomy"><span>分类 / 标签 / 词库</span><span class="nav-kpi">54</span></a>
+          <a class="nav-link" href="#sources"><span>数据源管理</span><span class="nav-kpi">7</span></a>
+          <a class="nav-link" href="#strategy"><span>模型与检索策略</span><span class="nav-kpi">0.78</span></a>
+          <a class="nav-link" href="#audit"><span>通知集成 / 审计</span><span class="nav-kpi">24h</span></a>
+          <a class="nav-link" href="#settings"><span>系统设置</span><span class="nav-kpi">6</span></a>
+        </nav>
+        <div class="side-card">
+          <strong>治理提醒</strong>
+          <div class="muted">- 生产环境待处理告警 2 条</div>
+          <div class="muted">- 新空间待审批 1 个</div>
+          <div class="muted">- 审计高风险事件 3 条</div>
+          <button class="btn tiny primary" data-open-modal="create-space" type="button">快速建空间</button>
+        </div>
+      </aside>
+
+      <section class="content">
+        <section class="panel" id="overview">
+          <div class="panel-header">
+            <div>
+              <h2>治理总览</h2>
+              <div class="panel-subtitle">用于平台巡检：同时观察组织规模、空间数量、接入数据源、策略状态和审计异常。</div>
+            </div>
+            <div class="segmented">
+              <button class="active" data-governance-env="prod" type="button">生产</button>
+              <button data-governance-env="gray" type="button">灰度</button>
+              <button data-governance-env="staging" type="button">预发</button>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="status success">组织数</div><div class="kpi-value">18</div><div class="kpi-footnote">平台租户覆盖客服、运营、产品、IT 等业务线</div></div>
+            <div class="kpi-card"><div class="status info">知识空间</div><div class="kpi-value">12</div><div class="kpi-footnote">其中 9 个已接入 Agent / 业务端</div></div>
+            <div class="kpi-card"><div class="status warning">数据源</div><div class="kpi-value">7</div><div class="kpi-footnote">Word / PDF / Excel / API / Wiki 混合接入</div></div>
+            <div class="kpi-card"><div class="status danger">审计异常</div><div class="kpi-value">3</div><div class="kpi-footnote">集中在权限变更和敏感词库编辑</div></div>
+          </div>
+          <div class="env-panel active" data-env-panel="prod" style="margin-top:14px;">
+            <div class="dual-grid">
+              <article class="card"><div class="card-title"><strong>生产环境状态</strong><span class="badge success">稳定</span></div><div class="muted">模型服务可用性 99.95%，知识检索默认阈值 0.78，通知集成全部在线。</div></article>
+              <article class="card"><div class="card-title"><strong>重点风险</strong><span class="badge warning">需跟进</span></div><div class="muted">财税空间最近 24h 有 2 次角色升级操作，建议复核审批链。</div></article>
+            </div>
+          </div>
+          <div class="env-panel" data-env-panel="gray" style="margin-top:14px;">
+            <div class="dual-grid">
+              <article class="card"><div class="card-title"><strong>灰度环境状态</strong><span class="badge info">观察中</span></div><div class="muted">新检索策略与新模板正在灰度验证，建议结合检索调试台同步观察效果。</div></article>
+              <article class="card"><div class="card-title"><strong>重点风险</strong><span class="badge warning">需回看</span></div><div class="muted">灰度召回范围扩大后，部分低版本文档进入 Top 5，需加强版本过滤。</div></article>
+            </div>
+          </div>
+          <div class="env-panel" data-env-panel="staging" style="margin-top:14px;">
+            <div class="dual-grid">
+              <article class="card"><div class="card-title"><strong>预发环境状态</strong><span class="badge success">可发布</span></div><div class="muted">组织与权限策略已与生产同步，新空间模板已准备好压测。</div></article>
+              <article class="card"><div class="card-title"><strong>重点风险</strong><span class="badge info">低</span></div><div class="muted">当前仅需核验新通知通道是否能覆盖审批链超时提醒。</div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="organization">
+          <div class="panel-header">
+            <div>
+              <h2>组织与角色权限</h2>
+              <div class="panel-subtitle">点击成员 / 角色行联动右侧详情，模拟平台管理员核对权限与作用域。</div>
+            </div>
+            <div class="toolbar-right">
+              <input class="input" id="admin-search" placeholder="搜索组织 / 角色 / 成员" style="width:280px;" />
+              <button class="btn soft" type="button">导出权限矩阵</button>
+            </div>
+          </div>
+          <div class="config-grid">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>组织</th><th>角色</th><th>成员</th><th>作用域</th><th>状态</th><th>最近变更</th></tr>
+                </thead>
+                <tbody>
+                  <tr data-admin-row data-title="平台管理员" data-owner="赵越" data-scope="全局配置 / 审计 / 策略发布" data-status="生效中" data-summary="可管理所有知识空间、检索策略和系统设置，拥有最终发布权限。">
+                    <td>平台治理组</td><td>平台管理员</td><td>赵越</td><td>全局</td><td><span class="status success">生效中</span></td><td>2026-03-19 09:30</td>
+                  </tr>
+                  <tr data-admin-row data-title="知识运营管理员" data-owner="顾萌" data-scope="运营空间 / 模板 / 审核流" data-status="生效中" data-summary="负责运营和客服空间的知识模板、审核流和发布节奏，不可修改系统级策略。">
+                    <td>知识运营组</td><td>知识运营管理员</td><td>顾萌</td><td>空间级</td><td><span class="status success">生效中</span></td><td>2026-03-18 16:12</td>
+                  </tr>
+                  <tr data-admin-row data-title="算法调优角色" data-owner="孙驰" data-scope="检索调试 / 评测集 / 策略观察" data-status="待复核" data-summary="可查看召回与评测结果，但模型发布仍需平台管理员审批。">
+                    <td>算法组</td><td>调优分析师</td><td>孙驰</td><td>策略级</td><td><span class="status warning">待复核</span></td><td>2026-03-19 10:05</td>
+                  </tr>
+                  <tr data-admin-row data-title="业务访客" data-owner="刘畅" data-scope="只读看板 / 业务结果" data-status="受限" data-summary="仅可查看消费数据和收藏反馈，不可进入治理或调试配置界面。">
+                    <td>业务团队</td><td>访客</td><td>刘畅</td><td>只读</td><td><span class="status info">受限</span></td><td>2026-03-17 14:22</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <aside class="card">
+              <div class="card-title"><strong>权限详情联动</strong><span class="badge info">点击表格</span></div>
+              <div class="kv-grid">
+                <div class="kv-box"><label>角色</label><div id="admin-detail-title">平台管理员</div></div>
+                <div class="kv-box"><label>责任人</label><div id="admin-detail-owner">赵越</div></div>
+                <div class="kv-box"><label>作用域</label><div id="admin-detail-scope">全局配置 / 审计 / 策略发布</div></div>
+                <div class="kv-box"><label>状态</label><div id="admin-detail-status">生效中</div></div>
+              </div>
+              <div class="note-box" style="margin-top:12px;">
+                <strong>说明</strong>
+                <div class="muted" id="admin-detail-summary">可管理所有知识空间、检索策略和系统设置，拥有最终发布权限。</div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel" id="spaces">
+          <div class="panel-header">
+            <div>
+              <h2>知识空间管理</h2>
+              <div class="panel-subtitle">展示空间配额、绑定模型、发布状态与负责人，支持从治理端创建新空间。</div>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn soft" type="button">批量变更标签策略</button>
+              <button class="btn primary" data-open-modal="create-space" type="button">新建空间</button>
+            </div>
+          </div>
+          <div class="card-grid">
+            <article class="card"><div class="card-title"><strong>客服知识库</strong><span class="badge success">运行中</span></div><div class="muted">文档 2,430 条，绑定客服助手和售后 Agent，默认阈值 0.78。</div></article>
+            <article class="card"><div class="card-title"><strong>产品知识库</strong><span class="badge warning">待调优</span></div><div class="muted">规则类占比高，建议强化版本字段与生效时间过滤。</div></article>
+            <article class="card"><div class="card-title"><strong>运营知识库</strong><span class="badge success">稳定</span></div><div class="muted">模板丰富，FAQ 与 SOP 结构完整，适合内容复用。</div></article>
+          </div>
+        </section>
+
+        <section class="panel" id="taxonomy" data-tab-root>
+          <div class="panel-header">
+            <div>
+              <h2>分类 / 标签 / 词库管理 与模板管理</h2>
+              <div class="panel-subtitle">一页内同时展示知识结构化治理能力，避免平台治理端页面过碎。</div>
+            </div>
+            <div class="tabs" data-tab-group>
+              <button class="tab active" data-tab-target="taxonomy-panel" type="button">分类 / 标签 / 词库</button>
+              <button class="tab" data-tab-target="template-panel" type="button">模板管理</button>
+            </div>
+          </div>
+          <div class="tab-panel active" data-tab-panel="taxonomy-panel">
+            <div class="dual-grid">
+              <article class="card">
+                <div class="card-title"><strong>分类树</strong><span class="badge info">三级结构</span></div>
+                <div class="timeline">
+                  <div class="timeline-item"><strong>客服服务</strong><div class="muted">账号、退款、发票、物流</div></div>
+                  <div class="timeline-item"><strong>产品规则</strong><div class="muted">活动、支付、权限、风控</div></div>
+                  <div class="timeline-item"><strong>运营支撑</strong><div class="muted">活动规范、文案模板、FAQ 专题</div></div>
+                </div>
+              </article>
+              <article class="card">
+                <div class="card-title"><strong>标签 / 词库</strong><span class="badge warning">需治理</span></div>
+                <div class="activity-list">
+                  <div class="activity-item"><div><strong>#退款</strong><div class="muted">别名 12 个，覆盖“到账”“秒退”等问法</div></div><span class="status success">健康</span></div>
+                  <div class="activity-item"><div><strong>#开票</strong><div class="muted">近期新增“专票 / 普票”标签</div></div><span class="status info">更新中</span></div>
+                  <div class="activity-item"><div><strong>风险词库</strong><div class="muted">需新增补偿承诺相关词条</div></div><span class="status warning">待补充</span></div>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="tab-panel" data-tab-panel="template-panel">
+            <div class="card-grid">
+              <article class="card"><div class="card-title"><strong>FAQ 模板</strong><span class="badge success">默认</span></div><div class="muted">包含问题、标准答案、别名问法、来源、版本字段。</div></article>
+              <article class="card"><div class="card-title"><strong>SOP 模板</strong><span class="badge info">流程型</span></div><div class="muted">包含步骤、前置条件、异常处理与回退说明。</div></article>
+              <article class="card"><div class="card-title"><strong>规则模板</strong><span class="badge warning">强审核</span></div><div class="muted">发布前必须补齐生效时间、限制条件和审批人。</div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="sources">
+          <div class="panel-header">
+            <div>
+              <h2>数据源管理</h2>
+              <div class="panel-subtitle">覆盖文档、表格、API 和 Wiki 等多类数据源，展示接入状态与清洗提醒。</div>
+            </div>
+          </div>
+          <div class="dual-grid">
+            <article class="card">
+              <div class="card-title"><strong>接入清单</strong><span class="badge success">7 个</span></div>
+              <div class="timeline">
+                <div class="timeline-item"><strong>企业 Wiki</strong><div class="muted">每日凌晨同步，最近一次成功 02:15。</div></div>
+                <div class="timeline-item"><strong>Excel FAQ 批量导入</strong><div class="muted">支持映射标题、答案、标签和来源。</div></div>
+                <div class="timeline-item"><strong>业务 API</strong><div class="muted">实时拉取退款规则与活动政策。</div></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>清洗与告警</strong><span class="badge warning">2 条待处理</span></div>
+              <div class="activity-list">
+                <div class="activity-item"><div><strong>财税 API</strong><div class="muted">字段缺少更新时间，影响版本过滤</div></div><span class="status warning">待处理</span></div>
+                <div class="activity-item"><div><strong>运营 Excel</strong><div class="muted">3 列标签字段格式不统一</div></div><span class="status danger">异常</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="strategy">
+          <div class="panel-header">
+            <div>
+              <h2>模型与检索策略配置</h2>
+              <div class="panel-subtitle">模拟平台管理员统一调整默认阈值、版本过滤和重排策略，然后交给运营 / 调优端继续验证。</div>
+            </div>
+          </div>
+          <div class="dual-grid">
+            <article class="card">
+              <div class="card-title"><strong>默认策略</strong><span class="badge info">可联动</span></div>
+              <div class="slider-row">
+                <span class="badge info">默认阈值</span>
+                <input id="governance-threshold" type="range" min="0.55" max="0.92" step="0.01" value="0.78" />
+                <strong id="governance-threshold-value">0.78</strong>
+              </div>
+              <div class="kv-grid" style="margin-top:14px;">
+                <div class="kv-box"><label>当前模式</label><div id="governance-mode">平衡治理</div></div>
+                <div class="kv-box"><label>版本过滤</label><div>默认开启，只保留最新生效版本</div></div>
+                <div class="kv-box"><label>重排策略</label><div>FAQ / 规则混合重排</div></div>
+                <div class="kv-box"><label>审计采样</label><div>10%</div></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>策略影响预览</strong><span class="badge warning">实时说明</span></div>
+              <div class="preview-answer">
+                <strong>治理建议</strong>
+                <div id="governance-impact">适合作为大部分业务线的默认策略，兼顾召回与稳定性。</div>
+                <blockquote>平台建议：默认策略在治理端统一收口，具体问题再在检索调试台和 Agent 集成端做二次验证。</blockquote>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="audit">
+          <div class="panel-header">
+            <div>
+              <h2>通知与集成配置 / 日志与审计中心</h2>
+              <div class="panel-subtitle">用于说明审批提醒、异常通知、操作留痕和高风险事件审计能力。</div>
+            </div>
+          </div>
+          <div class="dual-grid">
+            <article class="card">
+              <div class="card-title"><strong>通知与集成</strong><span class="badge success">在线</span></div>
+              <div class="activity-list">
+                <div class="activity-item"><div><strong>企业微信</strong><div class="muted">审批超时、发布成功、灰度告警</div></div><span class="status success">已启用</span></div>
+                <div class="activity-item"><div><strong>邮件</strong><div class="muted">日报与审计周报自动推送</div></div><span class="status success">已启用</span></div>
+                <div class="activity-item"><div><strong>Webhook</strong><div class="muted">同步给外部监控平台</div></div><span class="status info">灰度中</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>审计中心</strong><span class="badge danger">高风险 3 条</span></div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>时间</th><th>事件</th><th>操作者</th><th>风险</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>10:12</td><td>角色升级为平台管理员</td><td>赵越</td><td><span class="status danger">高</span></td></tr>
+                    <tr><td>09:48</td><td>风险词库被批量编辑</td><td>顾萌</td><td><span class="status warning">中</span></td></tr>
+                    <tr><td>08:56</td><td>灰度策略阈值调整</td><td>孙驰</td><td><span class="status info">可追踪</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="settings">
+          <div class="panel-header">
+            <div>
+              <h2>系统设置</h2>
+              <div class="panel-subtitle">统一管理系统开关、默认审计采样、内容保留周期和跨端默认行为。</div>
+            </div>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item"><div><strong>默认展示引用链</strong><div class="muted">业务使用端与 Agent 集成端默认开启</div></div><button class="btn tiny primary" type="button">已开启</button></div>
+            <div class="activity-item"><div><strong>知识过期自动提醒</strong><div class="muted">到期前 7 天通知运营与责任人</div></div><button class="btn tiny primary" type="button">已开启</button></div>
+            <div class="activity-item"><div><strong>日志保留周期</strong><div class="muted">生产 180 天，灰度 30 天</div></div><button class="btn tiny soft" type="button">编辑</button></div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <div class="modal-overlay" data-modal="create-space">
+    <div class="modal">
+      <h3>新建知识空间</h3>
+      <div class="panel-subtitle">在平台治理端快速创建新空间，并同步默认模板、权限与检索策略。</div>
+      <div class="form-grid" style="margin-top:14px;">
+        <div><input class="input" value="财税知识库" /></div>
+        <div><input class="input" value="负责人：陈澄" /></div>
+        <div><select class="select"><option>默认模板：规则模板</option><option>默认模板：FAQ 模板</option></select></div>
+        <div><select class="select"><option>默认权限：空间管理员 + 审核员</option><option>默认权限：只读</option></select></div>
+        <div class="full"><textarea class="textarea">自动绑定财税词库、风险词库和版本过滤策略；通知通道默认接入企业微信。</textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn soft" data-close-modal type="button">取消</button>
+        <button class="btn primary" id="create-space-confirm" type="button">创建空间</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-note" id="floating-note"></div>
+  <script src="./app.js"></script>
+</body>
+</html>

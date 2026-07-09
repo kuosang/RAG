@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo 控制台 · 知识平台交互原型入口</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="demo-console">
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <span class="hero-badge">Demo 控制台 · 总入口</span>
+          <h1>知识平台交互原型控制台</h1>
+          <p>基于 `功能页列表清单.md`，在不改动原 `知识库demo.html` 的前提下，额外补齐六端原型：`Demo 控制台`、`管理后台`、`知识运营工作台`、`检索调试台`、`业务使用端`、`Agent 集成端`。本页既是总入口，也是用于演示角色切换、阈值调节、场景跳转和弹窗联动的控制台。</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#page-map">查看全部页面</a>
+            <button class="btn ghost" data-open-modal="demo-shortcuts" type="button">打开演示快捷面板</button>
+            <a class="btn soft" href="./知识平台产品原型总图.html">查看平面总图</a>
+            <a class="btn soft" href="./管理后台（平台治理端）.html">先看管理后台</a>
+          </div>
+          <div class="tag-row">
+            <span class="tag">角色切换</span>
+            <span class="tag">阈值滑块</span>
+            <span class="tag">快捷跳转</span>
+            <span class="tag">弹窗演示</span>
+            <span class="tag">6 端原型总览</span>
+            <span class="tag">平面总图</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-note">建议先用控制台定演示路径，再按页面深入体验治理、调试、消费和接入链路。</div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <strong>控制台导航</strong>
+          <span>用于切角色、定场景、快速跳到对应原型</span>
+        </div>
+        <nav class="side-nav">
+          <a class="nav-link active" href="#overview"><span>总览看板</span><span class="nav-kpi">6</span></a>
+          <a class="nav-link" href="#role-switch"><span>角色切换</span><span class="nav-kpi">4</span></a>
+          <a class="nav-link" href="#page-map"><span>页面地图</span><span class="nav-kpi">6</span></a>
+          <a class="nav-link" href="#demo-actions"><span>演示操作台</span><span class="nav-kpi">3</span></a>
+          <a class="nav-link" href="#coverage"><span>覆盖说明</span><span class="nav-kpi">100%</span></a>
+        </nav>
+        <div class="side-card">
+          <strong>推荐演示顺序</strong>
+          <div class="muted">- 平台管理员：先看治理端</div>
+          <div class="muted">- 知识运营：再看生产与调试</div>
+          <div class="muted">- 业务同学：最后看消费与 Agent 接入</div>
+          <button class="btn tiny primary" data-open-modal="demo-shortcuts" type="button">查看快捷动作</button>
+        </div>
+      </aside>
+
+      <section class="content">
+        <section class="panel" id="overview">
+          <div class="panel-header">
+            <div>
+              <h2>总览看板</h2>
+              <div class="panel-subtitle">用来快速介绍当前原型覆盖范围、核心演示价值和推荐顺序，适合作为汇报开场页。</div>
+            </div>
+            <div class="toolbar-right">
+              <span class="badge success">已覆盖 6 端</span>
+              <span class="badge info">独立 HTML 文件</span>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="status info">原型页面</div><div class="kpi-value">6</div><div class="kpi-footnote">含新增 4 页 + 已有 2 页</div></div>
+            <div class="kpi-card"><div class="status success">可交互模块</div><div class="kpi-value">30+</div><div class="kpi-footnote">筛选、联动、弹窗、抽屉、阈值调节</div></div>
+            <div class="kpi-card"><div class="status warning">推荐演示时长</div><div class="kpi-value">12m</div><div class="kpi-footnote">按角色分段讲更容易理解</div></div>
+            <div class="kpi-card"><div class="status danger">高价值场景</div><div class="kpi-value">4</div><div class="kpi-footnote">治理、生产、调试、消费闭环</div></div>
+          </div>
+          <div class="console-grid" style="margin-top:14px;">
+            <article class="card">
+              <div class="card-title"><strong>本轮原型价值</strong><span class="badge info">面向汇报</span></div>
+              <div class="timeline">
+                <div class="timeline-item"><strong>平台治理端</strong><div class="muted">强调组织、权限、空间、模板、数据源和系统级策略。</div></div>
+                <div class="timeline-item"><strong>生产运营端</strong><div class="muted">强调知识从创建、审核、发布到维护闭环的日常工作流。</div></div>
+                <div class="timeline-item"><strong>调试验证端</strong><div class="muted">强调 Query 调试、召回重排、失败定位和评测结果。</div></div>
+                <div class="timeline-item"><strong>业务消费端</strong><div class="muted">强调搜索入口、知识详情、收藏反馈和最近浏览体验。</div></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>推荐讲解话术</strong><span class="badge success">顺滑切换</span></div>
+              <div class="preview-answer">
+                <strong>“先看平台怎么治理，再看知识怎么生产，然后看检索如何调试，最后看业务侧怎么消费，Agent 如何接入。”</strong>
+                <div>这样可以把平台能力、运营流程、调试手段和业务价值串成一条清晰主线。</div>
+                <blockquote>如果只做 5 分钟演示，建议保留：管理后台 → 知识运营工作台 → 检索调试台 → 业务使用端。</blockquote>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="role-switch">
+          <div class="panel-header">
+            <div>
+              <h2>角色切换</h2>
+              <div class="panel-subtitle">模拟不同参会人进入控制台时，系统如何自动推荐最合适的演示起点。</div>
+            </div>
+          </div>
+          <div class="dual-grid">
+            <article class="card">
+              <div class="card-title"><strong>选择角色</strong><span class="badge warning">点击切换</span></div>
+              <div class="pill-group" data-pill-group>
+                <button class="pill active" data-pill data-demo-role data-role-name="平台管理员" data-role-summary="关注组织权限、空间策略、模型与通知配置。" data-role-focus="先看管理后台，再看 Demo 控制台的覆盖说明。" data-role-cta="进入管理后台" data-role-href="./管理后台（平台治理端）.html" type="button">平台管理员</button>
+                <button class="pill" data-pill data-demo-role data-role-name="知识运营" data-role-summary="关注知识创建、审核、发布、维护与质量分析。" data-role-focus="先看知识运营工作台，再去检索调试台看失败问题怎么回流。" data-role-cta="进入知识运营工作台" data-role-href="./知识运营工作台（生产治理端）.html" type="button">知识运营</button>
+                <button class="pill" data-pill data-demo-role data-role-name="算法 / 调优同学" data-role-summary="关注 Query 测试、召回、重排、引用链路和评测表现。" data-role-focus="建议从检索调试台开始，再结合 Agent 集成端观察策略发布。" data-role-cta="进入检索调试台" data-role-href="./检索调试台（调试验证端）.html" type="button">算法 / 调优</button>
+                <button class="pill" data-pill data-demo-role data-role-name="业务使用方" data-role-summary="关注搜索体验、知识详情、收藏反馈与最近浏览。" data-role-focus="建议从业务使用端切入，再补充 Agent 集成端说明接入效果。" data-role-cta="进入业务使用端" data-role-href="./业务使用端（知识消费端）.html" type="button">业务使用方</button>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>当前推荐</strong><span class="badge info">联动预览</span></div>
+              <div class="kv-grid">
+                <div class="kv-box"><label>角色</label><div id="demo-role-name">平台管理员</div></div>
+                <div class="kv-box"><label>推荐起点</label><div id="demo-role-focus">先看管理后台，再看 Demo 控制台的覆盖说明。</div></div>
+              </div>
+              <div class="note-box" style="margin-top:12px;">
+                <strong>角色关注点</strong>
+                <div class="muted" id="demo-role-summary">关注组织权限、空间策略、模型与通知配置。</div>
+              </div>
+              <div class="drawer-actions">
+                <a class="btn primary" id="demo-role-link" href="./管理后台（平台治理端）.html">进入管理后台</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="page-map">
+          <div class="panel-header">
+            <div>
+              <h2>页面地图</h2>
+              <div class="panel-subtitle">六端原型统一入口，每张卡都能直接跳转到独立 HTML 页面。</div>
+            </div>
+            <div class="toolbar-right">
+              <a class="btn soft" href="./知识平台产品原型总图.html">查看平面总图</a>
+            </div>
+          </div>
+          <section class="quick-links" style="margin-top:0;">
+            <article class="link-card">
+              <h3>Demo 控制台</h3>
+              <p>总入口 + 角色切换 + 阈值调节 + 快捷跳转 + 弹窗演示。</p>
+              <div class="hero-actions"><a class="btn primary" href="./Demo控制台（总入口）.html">打开原型</a><a class="btn soft" href="#demo-actions">看演示操作台</a></div>
+            </article>
+            <article class="link-card">
+              <h3>管理后台</h3>
+              <p>组织权限、知识空间、模板、数据源、模型检索策略、通知集成与审计。</p>
+              <div class="hero-actions"><a class="btn primary" href="./管理后台（平台治理端）.html">打开原型</a><a class="btn soft" href="./管理后台（平台治理端）.html#strategy">看策略配置</a></div>
+            </article>
+            <article class="link-card">
+              <h3>知识运营工作台</h3>
+              <p>知识生产治理链路：创建、审核、发布、维护、反馈与质量分析。</p>
+              <div class="hero-actions"><a class="btn primary" href="./知识运营工作台（生产治理端）.html">打开原型</a><a class="btn soft" href="./知识运营工作台（生产治理端）.html#quality">看质量分析</a></div>
+            </article>
+            <article class="link-card">
+              <h3>检索调试台</h3>
+              <p>Query 测试、召回结果、重排分析、引用链路、失败问题与评测结果。</p>
+              <div class="hero-actions"><a class="btn primary" href="./检索调试台（调试验证端）.html">打开原型</a><a class="btn soft" href="./检索调试台（调试验证端）.html#failure">看失败分析</a></div>
+            </article>
+            <article class="link-card">
+              <h3>业务使用端</h3>
+              <p>搜索入口、分类导航、结果详情、收藏反馈和最近浏览闭环。</p>
+              <div class="hero-actions"><a class="btn primary" href="./业务使用端（知识消费端）.html">打开原型</a><a class="btn soft" href="./业务使用端（知识消费端）.html#results">看搜索结果</a></div>
+            </article>
+            <article class="link-card">
+              <h3>Agent 集成端</h3>
+              <p>知识绑定、检索策略、Prompt、Workflow、监控和 API 配置。</p>
+              <div class="hero-actions"><a class="btn primary" href="./Agent集成端（接入编排端）.html">打开原型</a><a class="btn soft" href="./Agent集成端（接入编排端）.html#monitor">看调用监控</a></div>
+            </article>
+          </section>
+        </section>
+
+        <section class="panel" id="demo-actions">
+          <div class="panel-header">
+            <div>
+              <h2>演示操作台</h2>
+              <div class="panel-subtitle">模拟知识库 demo 中的可调控体验：阈值滑块、场景卡片和跳转联动。</div>
+            </div>
+          </div>
+          <div class="dual-grid">
+            <article class="card">
+              <div class="card-title"><strong>演示阈值</strong><span class="badge info">实时联动</span></div>
+              <div class="slider-row">
+                <span class="badge info">统一阈值</span>
+                <input id="demo-threshold" type="range" min="0.55" max="0.92" step="0.01" value="0.74" />
+                <strong id="demo-threshold-value">0.74</strong>
+              </div>
+              <div class="kv-grid" style="margin-top:14px;">
+                <div class="kv-box"><label>当前模式</label><div id="demo-threshold-mode">平衡模式</div></div>
+                <div class="kv-box"><label>说明</label><div id="demo-threshold-desc">适合演示大多数路径：兼顾召回数量与展示稳定性。</div></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-title"><strong>场景选择</strong><span class="badge warning">点击切换</span></div>
+              <div class="result-stack">
+                <article class="result-card active" data-demo-scenario data-scenario-title="治理巡检场景" data-scenario-summary="面向管理层汇报，先看空间、权限、模型策略与审计闭环。" data-scenario-hint="推荐路径：管理后台 → Demo 控制台覆盖说明。" data-scenario-href="./管理后台（平台治理端）.html">
+                  <div class="title-row"><strong>治理巡检</strong><span class="status info">平台</span></div>
+                  <div class="snippet">适合展示系统级配置能力与平台稳定性。</div>
+                </article>
+                <article class="result-card" data-demo-scenario data-scenario-title="生产运营场景" data-scenario-summary="面向知识运营团队，重点讲创建、审核、发布、维护与反馈回流。" data-scenario-hint="推荐路径：知识运营工作台 → 检索调试台。" data-scenario-href="./知识运营工作台（生产治理端）.html">
+                  <div class="title-row"><strong>生产运营</strong><span class="status success">运营</span></div>
+                  <div class="snippet">适合展示知识生命周期与人效提升。</div>
+                </article>
+                <article class="result-card" data-demo-scenario data-scenario-title="消费闭环场景" data-scenario-summary="面向业务方，展示搜索、知识详情、收藏反馈及 Agent 最终接入效果。" data-scenario-hint="推荐路径：业务使用端 → Agent 集成端。" data-scenario-href="./业务使用端（知识消费端）.html">
+                  <div class="title-row"><strong>消费闭环</strong><span class="status warning">业务</span></div>
+                  <div class="snippet">适合说明平台最终如何被使用、被验证、被接入。</div>
+                </article>
+              </div>
+            </article>
+          </div>
+          <div class="preview-answer" style="margin-top:14px;">
+            <strong id="demo-scenario-title">治理巡检场景</strong>
+            <div id="demo-scenario-summary">面向管理层汇报，先看空间、权限、模型策略与审计闭环。</div>
+            <blockquote id="demo-scenario-hint">推荐路径：管理后台 → Demo 控制台覆盖说明。</blockquote>
+            <div class="drawer-actions"><a class="btn primary" id="demo-scenario-link" href="./管理后台（平台治理端）.html">跳到对应原型</a></div>
+          </div>
+        </section>
+
+        <section class="panel" id="coverage">
+          <div class="panel-header">
+            <div>
+              <h2>覆盖说明</h2>
+              <div class="panel-subtitle">把本轮已完成页面与 `功能页列表清单.md` 做映射，方便你核对是否补齐。</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>端</th><th>覆盖文件</th><th>关键页面</th><th>交互类型</th><th>状态</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Demo 控制台</td><td>`Demo控制台（总入口）.html` / `知识平台交互原型入口.html`</td><td>总览 / 角色切换 / 场景跳转</td><td>按钮联动 / 滑块 / 弹窗</td><td><span class="status success">已完成</span></td></tr>
+                <tr><td>管理后台</td><td>`管理后台（平台治理端）.html`</td><td>组织权限 / 空间 / 策略 / 审计</td><td>表格联动 / 环境切换 / 模态框</td><td><span class="status success">已完成</span></td></tr>
+                <tr><td>知识运营工作台</td><td>`知识运营工作台（生产治理端）.html`</td><td>创建 / 审核 / 发布 / 维护</td><td>筛选 / 表格联动 / 抽屉</td><td><span class="status success">已完成</span></td></tr>
+                <tr><td>检索调试台</td><td>`检索调试台（调试验证端）.html`</td><td>Query / 召回 / 重排 / 失败分析</td><td>调试运行 / 阈值联动 / 场景切换</td><td><span class="status success">已完成</span></td></tr>
+                <tr><td>业务使用端</td><td>`业务使用端（知识消费端）.html`</td><td>搜索 / 详情 / 收藏 / 反馈</td><td>搜索筛选 / 详情联动 / 收藏</td><td><span class="status success">已完成</span></td></tr>
+                <tr><td>Agent 集成端</td><td>`Agent集成端（接入编排端）.html`</td><td>知识绑定 / 策略 / Workflow / API</td><td>Agent 切换 / 阈值联动 / 发布</td><td><span class="status success">已完成</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <div class="modal-overlay" data-modal="demo-shortcuts">
+    <div class="modal">
+      <h3>演示快捷面板</h3>
+      <div class="panel-subtitle">适合开会前快速确认本轮演示怎么讲、先跳哪一页、重点看什么。</div>
+      <div class="check-list" style="margin-top:14px;">
+        <div class="check-item"><div><strong>治理路线</strong><div class="muted">管理后台 → 审计中心 → 模型与检索策略</div></div><a class="btn tiny soft" href="./管理后台（平台治理端）.html">打开</a></div>
+        <div class="check-item"><div><strong>运营路线</strong><div class="muted">知识运营工作台 → 审核中心 → 维护中心 → 质量分析</div></div><a class="btn tiny soft" href="./知识运营工作台（生产治理端）.html">打开</a></div>
+        <div class="check-item"><div><strong>调优路线</strong><div class="muted">检索调试台 → 召回结果 → 失败分析 → 评测结果</div></div><a class="btn tiny soft" href="./检索调试台（调试验证端）.html">打开</a></div>
+        <div class="check-item"><div><strong>业务路线</strong><div class="muted">业务使用端 → 搜索结果 → 收藏反馈 → Agent 集成端</div></div><a class="btn tiny soft" href="./业务使用端（知识消费端）.html">打开</a></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn soft" data-close-modal type="button">关闭</button>
+        <button class="btn primary" id="demo-shortcut-confirm" type="button">确认本轮演示路径</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-note" id="floating-note"></div>
+  <script src="./app.js"></script>
+</body>
+</html>

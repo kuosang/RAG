@@ -11,41 +11,68 @@
     <section class="hero">
       <div class="hero-top">
         <div>
-          <span class="hero-badge">新增独立原型 · 不改动原 `知识库demo.html`</span>
-          <h1>知识平台交互原型入口</h1>
-          <p>基于 `功能页列表清单.md` 与 `知识库demo.html` 的信息结构和交互风格，额外拆出两套更聚焦的可交互页面：`知识运营工作台` 与 `Agent 集成端`。页面包含标签切换、状态筛选、详情联动、弹窗抽屉、阈值调节与发布模拟。</p>
+          <span class="hero-badge">知识平台交互原型入口</span>
+          <h1>原型入口已整理为中文功能页命名</h1>
+          <p>本入口页保留为兼容导航页，六端原型文件已经统一切换为中文功能页名称；你可以从这里进入新的 `Demo 控制台` 或直接打开新增的 `知识平台产品原型总图` 查看整套平面产品原型设计图。</p>
           <div class="hero-actions">
-            <a class="btn primary" href="./ops-workbench.html">进入知识运营工作台</a>
-            <a class="btn ghost" href="./agent-integration.html">进入 Agent 集成端</a>
+            <a class="btn primary" href="./Demo控制台（总入口）.html">进入 Demo 控制台</a>
+            <a class="btn soft" href="./知识平台产品原型总图.html">查看平面总图</a>
+            <a class="btn soft" href="./管理后台（平台治理端）.html">进入管理后台</a>
           </div>
           <div class="tag-row">
-            <span class="tag">工作台首页 / 我的知识 / 新建知识 / 审核 / 维护</span>
-            <span class="tag">Agent 列表 / 绑定配置 / 策略 / Workflow / 监控 / API</span>
-            <span class="tag">纯前端 HTML + CSS + JS，可直接本地预览</span>
+            <span class="tag">中文文件名</span>
+            <span class="tag">平面总图</span>
+            <span class="tag">六端联动</span>
+            <span class="tag">兼容入口</span>
           </div>
         </div>
       </div>
-      <div class="footer-note">建议先从入口页跳转，再分别体验两端的细分交互。</div>
+      <div class="footer-note">建议先看平面总图，再进入 Demo 控制台按角色演示。</div>
     </section>
 
-    <section class="quick-links">
-      <article class="link-card">
-        <h3>知识运营工作台</h3>
-        <p>覆盖知识生产治理链路：看板、知识列表、创建编辑、导入中心、审核中心、版本发布、维护任务与质量分析，并支持表格联动与知识详情抽屉。</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="./ops-workbench.html">打开原型</a>
-          <a class="btn soft" href="./ops-workbench.html#quality">跳转质量分析</a>
+    <section class="panel" style="margin-top:20px;">
+      <div class="panel-header">
+        <div>
+          <h2>当前文件清单</h2>
+          <div class="panel-subtitle">以下六个页面已经完成中文功能页命名，并保持原有交互能力。</div>
         </div>
-      </article>
-      <article class="link-card">
-        <h3>Agent 集成端</h3>
-        <p>覆盖 Agent 接入编排链路：Agent 列表、知识绑定、检索策略、Prompt / 上下文、Workflow、调用监控、引用展示与 API Key 管理，并支持阈值联动预览。</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="./agent-integration.html">打开原型</a>
-          <a class="btn soft" href="./agent-integration.html#monitor">跳转调用监控</a>
-        </div>
-      </article>
+      </div>
+      <div class="quick-links" style="margin-top:0;">
+        <article class="link-card">
+          <h3>Demo 控制台</h3>
+          <p>`Demo控制台（总入口）.html`</p>
+          <div class="hero-actions"><a class="btn primary" href="./Demo控制台（总入口）.html">打开</a></div>
+        </article>
+        <article class="link-card">
+          <h3>管理后台</h3>
+          <p>`管理后台（平台治理端）.html`</p>
+          <div class="hero-actions"><a class="btn primary" href="./管理后台（平台治理端）.html">打开</a></div>
+        </article>
+        <article class="link-card">
+          <h3>知识运营工作台</h3>
+          <p>`知识运营工作台（生产治理端）.html`</p>
+          <div class="hero-actions"><a class="btn primary" href="./知识运营工作台（生产治理端）.html">打开</a></div>
+        </article>
+        <article class="link-card">
+          <h3>检索调试台</h3>
+          <p>`检索调试台（调试验证端）.html`</p>
+          <div class="hero-actions"><a class="btn primary" href="./检索调试台（调试验证端）.html">打开</a></div>
+        </article>
+        <article class="link-card">
+          <h3>业务使用端</h3>
+          <p>`业务使用端（知识消费端）.html`</p>
+          <div class="hero-actions"><a class="btn primary" href="./业务使用端（知识消费端）.html">打开</a></div>
+        </article>
+        <article class="link-card">
+          <h3>Agent 集成端</h3>
+          <p>`Agent集成端（接入编排端）.html`</p>
+          <div class="hero-actions"><a class="btn primary" href="./Agent集成端（接入编排端）.html">打开</a></div>
+        </article>
+      </div>
     </section>
   </main>
+
+  <div class="floating-note" id="floating-note"></div>
+  <script src="./app.js"></script>
 </body>
 </html>

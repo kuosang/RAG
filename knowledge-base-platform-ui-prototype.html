@@ -1,0 +1,1581 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>知识库平台 UI 原型图与可视化设计稿（全功能页面 + 字段说明）</title>
+  <style>
+    :root {
+      --primary: #1f6feb;
+      --primary-2: #2b90ff;
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #1f2328;
+      --muted: #5a6570;
+      --border: #e5e7eb;
+      --accent: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 8px 24px rgba(0,0,0,0.08);
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #1f6feb, #6aa5ff);
+      color: #fff;
+      padding: 28px 24px;
+    }
+    header h1 {
+      margin: 0 0 6px 0;
+      font-size: 22px;
+    }
+    header p { margin: 0; opacity: 0.9; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+    .section h2 { margin: 0 0 12px 0; font-size: 18px; }
+    .section h3 { margin: 16px 0 8px 0; font-size: 16px; }
+    .section h4 { margin: 14px 0 6px 0; font-size: 14px; color: var(--muted); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+    .chip { display: inline-block; padding: 2px 8px; border-radius: 12px; background: #eef2ff; color: #3949ab; font-size: 12px; margin-right: 6px; }
+
+    .palette { display: flex; gap: 10px; flex-wrap: wrap; }
+    .swatch { width: 140px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+    .swatch .color { height: 60px; }
+    .swatch .label { padding: 6px 8px; font-size: 12px; color: var(--muted); }
+
+    .component-demo { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .btn { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: #fff; }
+    .btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .btn.ghost { color: var(--primary); border-color: #cfe0ff; background: #f3f7ff; }
+    .input { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; min-width: 220px; }
+    .tag { padding: 2px 8px; border-radius: 6px; background: #f3f4f6; font-size: 12px; }
+
+    .page-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      background: #fff;
+    }
+    .page-card h3 { margin-top: 0; }
+
+    .page-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 12px; color: var(--muted); }
+    .page-meta div { background: #f8fafc; border: 1px dashed var(--border); padding: 8px; border-radius: 8px; }
+
+    .wireframe {
+      margin: 10px 0 12px 0;
+      border: 1px dashed #cdd7e1;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f7f9fc;
+    }
+    .wf-top { background: #e5efff; padding: 8px; font-size: 12px; }
+    .wf-body { display: grid; grid-template-columns: 180px 1fr; min-height: 160px; }
+    .wf-side { background: #f1f5f9; padding: 8px; font-size: 12px; border-right: 1px dashed #cdd7e1; }
+    .wf-main { padding: 8px; display: grid; gap: 8px; }
+    .wf-box { background: #fff; border: 1px dashed #cdd7e1; border-radius: 8px; padding: 10px; font-size: 12px; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12px; }
+    th, td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; }
+    th { background: #f3f6fb; }
+
+    .anchor-list a { display: inline-block; margin: 4px 8px 4px 0; color: var(--primary); text-decoration: none; font-size: 12px; }
+    .domain-title { font-size: 17px; margin: 6px 0 10px 0; }
+    .divider { height: 1px; background: var(--border); margin: 12px 0; }
+    .hidden { display: none !important; }
+
+    .demo-console .demo-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .control-block { border: 1px dashed var(--border); border-radius: 12px; padding: 12px; background: #f8fafc; }
+    .pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 12px; cursor: pointer; }
+    .pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .flow-steps a { display: inline-block; margin: 4px 6px 4px 0; font-size: 12px; color: var(--primary); text-decoration: none; }
+    .slider-row { display: flex; align-items: center; gap: 10px; }
+    .slider-row input[type="range"] { width: 160px; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 6px; font-size: 11px; background: #e5f3ff; color: #1f6feb; }
+    .badge.warn { background: #fff4e5; color: #b45309; }
+    .demo-mqa { border: 1px dashed var(--border); border-radius: 10px; padding: 10px; background: #f8fafc; }
+    .demo-mqa-list { display: grid; gap: 6px; margin-top: 8px; }
+    .score-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: #fff; font-size: 12px; }
+    .score-row.is-active { border-color: #93c5fd; background: #eff6ff; }
+    .score-label { display: flex; gap: 8px; align-items: center; }
+    .score-value { font-weight: 600; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 999; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #fff; border-radius: 14px; max-width: 520px; width: 100%; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .modal h3 { margin: 0 0 8px 0; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+    .muted { color: var(--muted); font-size: 12px; }
+
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .page-meta, .demo-console .demo-controls { grid-template-columns: 1fr; }
+      .wf-body { grid-template-columns: 1fr; }
+      .wf-side { border-right: none; border-bottom: 1px dashed #cdd7e1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>知识库平台 UI 原型图与可视化设计稿</h1>
+    <p>覆盖核心功能页面 + 字段说明｜内部 Agent 使用、调试与闭环优先（V1.0）</p>
+  </header>
+
+  <div class="container">
+    <section class="section">
+      <h2>01 视觉规范与组件基础</h2>
+      <div class="grid-2">
+        <div>
+          <h3>色彩体系</h3>
+          <div class="palette">
+            <div class="swatch"><div class="color" style="background:#1f6feb"></div><div class="label">主色 / Primary</div></div>
+            <div class="swatch"><div class="color" style="background:#2b90ff"></div><div class="label">辅助色 / Accent</div></div>
+            <div class="swatch"><div class="color" style="background:#10b981"></div><div class="label">成功 / Success</div></div>
+            <div class="swatch"><div class="color" style="background:#f59e0b"></div><div class="label">警告 / Warning</div></div>
+            <div class="swatch"><div class="color" style="background:#ef4444"></div><div class="label">错误 / Danger</div></div>
+          </div>
+        </div>
+        <div>
+          <h3>排版与组件示例</h3>
+          <div class="component-demo">
+            <button class="btn primary">主按钮</button>
+            <button class="btn ghost">次按钮</button>
+            <button class="btn">中性按钮</button>
+            <input class="input" placeholder="搜索 / 输入内容" />
+            <span class="tag">标签</span>
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin-top:8px;">建议采用 12/14/16 三档字号；卡片圆角 12px；主按钮高度 32px。</p>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <h3>全局布局规范</h3>
+      <div class="wireframe">
+        <div class="wf-top">顶部导航：产品名称 / 全局搜索 / 消息 / 用户中心</div>
+        <div class="wf-body">
+          <div class="wf-side">左侧导航：模块菜单</div>
+          <div class="wf-main">
+            <div class="wf-box">页面标题与操作栏</div>
+            <div class="wf-box">过滤区 / 统计卡片</div>
+            <div class="wf-box">表格 / 列表 / 表单内容</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>02 页面索引（全功能页面）</h2>
+      <div class="anchor-list">
+        <strong>交互 Demo：</strong>
+        <a href="#demo-console">Demo 控制台</a>
+        <a href="#debug-query">MQA 阈值匹配</a>
+        <a href="#agent-bind">Agent 绑定</a>
+        <a href="#ops-maintain">维护任务</a>
+      </div>
+      <div class="anchor-list">
+        <strong>管理后台：</strong>
+        <a href="#admin-dashboard">后台首页</a>
+        <a href="#admin-spaces">知识空间管理</a>
+        <a href="#admin-taxonomy">分类/标签/词库</a>
+        <a href="#admin-template">模板管理</a>
+        <a href="#admin-datasource">数据源管理</a>
+        <a href="#admin-import">导入任务</a>
+        <a href="#admin-sync">同步任务</a>
+        <a href="#admin-model">模型与检索策略</a>
+        <a href="#admin-integration">通知与集成</a>
+        <a href="#admin-audit">日志与审计</a>
+        <a href="#admin-users">用户与角色</a>
+        <a href="#admin-system">系统设置</a>
+      </div>
+      <div class="anchor-list">
+        <strong>运营工作台：</strong>
+        <a href="#ops-home">工作台首页</a>
+        <a href="#ops-my">我的知识</a>
+        <a href="#ops-create">新建知识</a>
+        <a href="#ops-edit">知识详情编辑</a>
+        <a href="#ops-import">导入中心</a>
+        <a href="#ops-review-list">审核中心列表</a>
+        <a href="#ops-review-detail">审核详情</a>
+        <a href="#ops-version">版本与发布</a>
+        <a href="#ops-maintain">维护中心</a>
+        <a href="#ops-feedback">反馈处理</a>
+        <a href="#ops-quality">质量分析</a>
+      </div>
+      <div class="anchor-list">
+        <strong>检索调试台：</strong>
+        <a href="#debug-home">调试首页</a>
+        <a href="#debug-query">Query 测试</a>
+        <a href="#debug-recall">召回结果</a>
+        <a href="#debug-rerank">重排分析</a>
+        <a href="#debug-citation">引用链路</a>
+        <a href="#debug-fail">失败问题分析</a>
+        <a href="#debug-evalset">评测集管理</a>
+        <a href="#debug-evalresult">评测结果</a>
+      </div>
+      <div class="anchor-list">
+        <strong>业务使用端：</strong>
+        <a href="#biz-home">首页/搜索入口</a>
+        <a href="#biz-category">分类导航</a>
+        <a href="#biz-search">搜索结果</a>
+        <a href="#biz-detail">知识详情</a>
+        <a href="#biz-faq">FAQ 专题</a>
+        <a href="#biz-fav">我的收藏</a>
+        <a href="#biz-recent">最近浏览</a>
+        <a href="#biz-feedback">反馈记录</a>
+      </div>
+      <div class="anchor-list">
+        <strong>Agent 集成端：</strong>
+        <a href="#agent-list">Agent 列表</a>
+        <a href="#agent-detail">Agent 详情</a>
+        <a href="#agent-bind">知识绑定配置</a>
+        <a href="#agent-policy">检索策略配置</a>
+        <a href="#agent-prompt">Prompt 策略</a>
+        <a href="#agent-workflow">Workflow 节点配置</a>
+        <a href="#agent-monitor">调用监控</a>
+        <a href="#agent-citation">引用展示配置</a>
+        <a href="#agent-api">API/Key 文档</a>
+      </div>
+    </section>
+
+    <section class="section demo-console" id="demo-console">
+      <h2>交互 Demo 控制台（内部 Agent 调试闭环）</h2>
+      <p class="muted">该 demo 为可点击原型，用于模拟内部 Agent 的“调试—阈值—引用—反馈”闭环体验。</p>
+      <div class="demo-controls">
+        <div class="control-block">
+          <h3>角色与视图</h3>
+          <div class="pill-group" data-role-group>
+            <button class="pill active" data-role="ai" type="button">AI 产品经理</button>
+            <button class="pill" data-role="admin" type="button">平台管理员</button>
+            <button class="pill" data-role="ops" type="button">知识运营</button>
+            <button class="pill" data-role="owner" type="button">业务负责人</button>
+          </div>
+          <p class="muted">当前角色：<span id="demo-role">AI 产品经理</span></p>
+          <label class="muted"><input type="checkbox" id="toggle-biz" /> 展示业务使用端</label>
+        </div>
+        <div class="control-block">
+          <h3>核心链路</h3>
+          <div class="flow-steps">
+            <a href="#ops-create">知识录入</a>
+            <a href="#ops-review-detail">审核发布</a>
+            <a href="#debug-query">Query 调试</a>
+            <a href="#debug-recall">召回验证</a>
+            <a href="#agent-bind">Agent 绑定</a>
+            <a href="#agent-workflow">Workflow 节点</a>
+            <a href="#agent-monitor">调用监控</a>
+            <a href="#ops-maintain">维护闭环</a>
+          </div>
+          <p class="muted">点击节点可跳转到对应页面框架。</p>
+        </div>
+        <div class="control-block">
+          <h3>MQA 阈值匹配</h3>
+          <div class="slider-row">
+            <span class="badge">阈值</span>
+            <input id="mqa-threshold" type="range" min="0.5" max="0.95" step="0.01" value="0.72" />
+            <span id="mqa-value" class="score-value">0.72</span>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            <input class="input" id="mqa-query" placeholder="输入提问，例如：如何重置密码？" />
+            <button class="btn primary" id="mqa-run" type="button">运行测试</button>
+          </div>
+          <div class="demo-mqa" style="margin-top:10px;">
+            <div class="muted">当前问题：<span id="mqa-question">如何重置密码？</span></div>
+            <div class="muted">可引用答案数：<span id="mqa-count">2</span></div>
+            <div class="demo-mqa-list" id="mqa-list">
+              <div class="score-row" data-score="0.89">
+                <div class="score-label"><span class="badge">标准答案</span> 重置密码流程（SOP-账号）</div>
+                <div class="score-value">0.89</div>
+              </div>
+              <div class="score-row" data-score="0.76">
+                <div class="score-label"><span class="badge">产品说明</span> 账号安全与密码策略</div>
+                <div class="score-value">0.76</div>
+              </div>
+              <div class="score-row" data-score="0.71">
+                <div class="score-label"><span class="badge warn">FAQ</span> 忘记密码怎么办</div>
+                <div class="score-value">0.71</div>
+              </div>
+              <div class="score-row" data-score="0.62">
+                <div class="score-label"><span class="badge warn">边缘说明</span> 安全问题设置</div>
+                <div class="score-value">0.62</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="grid-2">
+        <div class="control-block">
+          <h3>关键操作演示</h3>
+          <div class="component-demo">
+            <button class="btn primary" data-open-modal="create" type="button">新建知识</button>
+            <button class="btn ghost" data-open-modal="bind" type="button">Agent 绑定</button>
+            <button class="btn" data-open-modal="maintain" type="button">指派维护任务</button>
+          </div>
+          <p class="muted">用于模拟抽屉/弹窗交互，无需后端。</p>
+        </div>
+        <div class="control-block">
+          <h3>当前状态</h3>
+          <div class="page-meta">
+            <div><strong>角色</strong>：<span id="state-role">AI 产品经理</span></div>
+            <div><strong>阈值</strong>：<span id="state-threshold">0.72</span></div>
+            <div><strong>可引用数</strong>：<span id="state-count">2</span></div>
+          </div>
+          <p class="muted" id="state-tip">阈值越高，Agent 回答越偏向标准答案。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 管理后台 -->
+    <section class="section" data-domain="admin">
+      <h2 class="domain-title">03 管理后台</h2>
+
+      <div class="page-card" id="admin-dashboard">
+        <h3>后台首页</h3>
+        <div class="page-meta">
+          <div><strong>目标</strong>：总览平台健康度与待办事项</div>
+          <div><strong>角色</strong>：平台管理员 / 运营</div>
+          <div><strong>状态</strong>：默认 / 空 / 无权限</div>
+        </div>
+        <div class="wireframe">
+          <div class="wf-top">指标卡 + 时间范围 + 快捷入口</div>
+          <div class="wf-body">
+            <div class="wf-side">待办提醒</div>
+            <div class="wf-main">
+              <div class="wf-box">趋势图（检索 / Agent 调用）</div>
+              <div class="wf-box">风险预警与最近活动</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>knowledge_total</td><td>number</td><td>是</td><td>知识总量</td></tr>
+          <tr><td>published_total</td><td>number</td><td>是</td><td>已发布知识数</td></tr>
+          <tr><td>hit_rate</td><td>percent</td><td>是</td><td>检索命中率</td></tr>
+          <tr><td>zero_result_rate</td><td>percent</td><td>是</td><td>零结果率</td></tr>
+          <tr><td>agent_calls</td><td>number</td><td>是</td><td>Agent 调用量</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-spaces">
+        <h3>知识空间管理</h3>
+        <div class="wireframe">
+          <div class="wf-top">新建空间 / 批量操作 / 筛选</div>
+          <div class="wf-body">
+            <div class="wf-side">空间树 / 业务域</div>
+            <div class="wf-main">
+              <div class="wf-box">空间列表</div>
+              <div class="wf-box">空间详情抽屉</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>space_name</td><td>string</td><td>是</td><td>空间名称</td></tr>
+          <tr><td>space_code</td><td>string</td><td>是</td><td>空间编码</td></tr>
+          <tr><td>owner</td><td>user</td><td>是</td><td>负责人</td></tr>
+          <tr><td>visibility</td><td>enum</td><td>是</td><td>公开 / 受限</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>启用 / 归档</td></tr>
+        </table>
+        <p class="muted">支持多产品知识库的新增、删除、切换与迁移。</p>
+      </div>
+
+      <div class="page-card" id="admin-taxonomy">
+        <h3>分类 / 标签 / 词库管理</h3>
+        <div class="wireframe">
+          <div class="wf-top">新建分类 / 标签 / 词库</div>
+          <div class="wf-body">
+            <div class="wf-side">分类树</div>
+            <div class="wf-main">
+              <div class="wf-box">分类列表</div>
+              <div class="wf-box">标签与词库配置区</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>category_name</td><td>string</td><td>是</td><td>分类名称</td></tr>
+          <tr><td>tag_name</td><td>string</td><td>是</td><td>标签名称</td></tr>
+          <tr><td>synonyms</td><td>array</td><td>否</td><td>同义词集合</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-template">
+        <h3>模板管理</h3>
+        <div class="wireframe">
+          <div class="wf-top">新建模板 / 字段配置 / 版本管理</div>
+          <div class="wf-body">
+            <div class="wf-side">模板类型</div>
+            <div class="wf-main">
+              <div class="wf-box">模板列表</div>
+              <div class="wf-box">字段设计器</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>template_name</td><td>string</td><td>是</td><td>模板名称</td></tr>
+          <tr><td>template_type</td><td>enum</td><td>是</td><td>FAQ/规则/说明/SOP</td></tr>
+          <tr><td>fields</td><td>array</td><td>是</td><td>字段定义列表</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-datasource">
+        <h3>数据源管理</h3>
+        <div class="wireframe">
+          <div class="wf-top">新增数据源 / 测试连接 / 权限配置</div>
+          <div class="wf-body">
+            <div class="wf-side">数据源类型</div>
+            <div class="wf-main">
+              <div class="wf-box">数据源列表</div>
+              <div class="wf-box">连接信息与权限</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>source_name</td><td>string</td><td>是</td><td>数据源名称</td></tr>
+          <tr><td>source_type</td><td>enum</td><td>是</td><td>文件/接口/第三方系统</td></tr>
+          <tr><td>endpoint</td><td>string</td><td>否</td><td>连接地址</td></tr>
+          <tr><td>auth</td><td>object</td><td>否</td><td>鉴权配置</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-import">
+        <h3>导入任务管理</h3>
+        <div class="wireframe">
+          <div class="wf-top">新建导入 / 批量操作 / 失败重试</div>
+          <div class="wf-body">
+            <div class="wf-side">任务状态</div>
+            <div class="wf-main">
+              <div class="wf-box">导入任务列表</div>
+              <div class="wf-box">失败明细 / 日志</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>task_id</td><td>string</td><td>是</td><td>任务ID</td></tr>
+          <tr><td>source</td><td>string</td><td>是</td><td>来源文件/系统</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>运行中/成功/失败</td></tr>
+          <tr><td>total_count</td><td>number</td><td>是</td><td>导入总数</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-sync">
+        <h3>同步任务管理</h3>
+        <div class="wireframe">
+          <div class="wf-top">新建同步 / 调度策略 / 停止</div>
+          <div class="wf-body">
+            <div class="wf-side">同步频率</div>
+            <div class="wf-main">
+              <div class="wf-box">同步任务列表</div>
+              <div class="wf-box">调度详情</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>schedule</td><td>string</td><td>是</td><td>调度规则</td></tr>
+          <tr><td>last_run</td><td>datetime</td><td>否</td><td>最近执行</td></tr>
+          <tr><td>next_run</td><td>datetime</td><td>否</td><td>下次执行</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>启用/停用</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-model">
+        <h3>模型与检索策略配置</h3>
+        <div class="wireframe">
+          <div class="wf-top">模型选择 / 策略参数 / 保存发布</div>
+          <div class="wf-body">
+            <div class="wf-side">模型列表</div>
+            <div class="wf-main">
+              <div class="wf-box">Embedding / Rerank 设置</div>
+              <div class="wf-box">检索策略参数（TopK / 权重）</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>embedding_model</td><td>string</td><td>是</td><td>向量模型</td></tr>
+          <tr><td>rerank_model</td><td>string</td><td>否</td><td>重排模型</td></tr>
+          <tr><td>topk</td><td>number</td><td>是</td><td>召回数量</td></tr>
+          <tr><td>hybrid_ratio</td><td>number</td><td>是</td><td>混合召回比例</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-integration">
+        <h3>通知与集成配置</h3>
+        <div class="wireframe">
+          <div class="wf-top">Webhook / 通知策略 / API Key</div>
+          <div class="wf-body">
+            <div class="wf-side">集成类型</div>
+            <div class="wf-main">
+              <div class="wf-box">通知策略配置</div>
+              <div class="wf-box">Webhook & API Key 列表</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>notify_channel</td><td>enum</td><td>是</td><td>邮件/IM/短信</td></tr>
+          <tr><td>webhook_url</td><td>string</td><td>否</td><td>回调地址</td></tr>
+          <tr><td>api_key</td><td>string</td><td>否</td><td>访问密钥</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-audit">
+        <h3>日志与审计中心</h3>
+        <div class="wireframe">
+          <div class="wf-top">筛选 / 导出 / 风险告警</div>
+          <div class="wf-body">
+            <div class="wf-side">日志类型</div>
+            <div class="wf-main">
+              <div class="wf-box">操作日志列表</div>
+              <div class="wf-box">审计详情</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>actor</td><td>user</td><td>是</td><td>操作人</td></tr>
+          <tr><td>action</td><td>string</td><td>是</td><td>操作行为</td></tr>
+          <tr><td>target</td><td>string</td><td>是</td><td>对象</td></tr>
+          <tr><td>timestamp</td><td>datetime</td><td>是</td><td>时间</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-users">
+        <h3>用户与角色管理</h3>
+        <div class="wireframe">
+          <div class="wf-top">新建角色 / 权限分配</div>
+          <div class="wf-body">
+            <div class="wf-side">角色列表</div>
+            <div class="wf-main">
+              <div class="wf-box">用户列表</div>
+              <div class="wf-box">权限矩阵</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>user_name</td><td>string</td><td>是</td><td>用户名</td></tr>
+          <tr><td>role</td><td>enum</td><td>是</td><td>角色</td></tr>
+          <tr><td>dept</td><td>string</td><td>否</td><td>部门</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>启用/禁用</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="admin-system">
+        <h3>系统设置</h3>
+        <div class="wireframe">
+          <div class="wf-top">基础配置 / 默认策略</div>
+          <div class="wf-body">
+            <div class="wf-side">设置项</div>
+            <div class="wf-main">
+              <div class="wf-box">系统参数表单</div>
+              <div class="wf-box">保存与回滚</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>default_language</td><td>enum</td><td>是</td><td>系统语言</td></tr>
+          <tr><td>timezone</td><td>string</td><td>是</td><td>时区</td></tr>
+          <tr><td>storage_limit</td><td>number</td><td>否</td><td>存储上限</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- 运营工作台 -->
+    <section class="section" data-domain="ops">
+      <h2 class="domain-title">04 知识运营工作台</h2>
+
+      <div class="page-card" id="ops-home">
+        <h3>工作台首页</h3>
+        <div class="wireframe">
+          <div class="wf-top">待办 / 快捷入口</div>
+          <div class="wf-body">
+            <div class="wf-side">我的任务</div>
+            <div class="wf-main">
+              <div class="wf-box">知识状态概览</div>
+              <div class="wf-box">反馈与维护提醒</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>pending_review</td><td>number</td><td>是</td><td>待审核数</td></tr>
+          <tr><td>draft_count</td><td>number</td><td>是</td><td>草稿数</td></tr>
+          <tr><td>maintenance_tasks</td><td>number</td><td>是</td><td>维护任务数</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-my">
+        <h3>我的知识（列表）</h3>
+        <div class="wireframe">
+          <div class="wf-top">筛选 / 新建 / 批量操作 / 导出</div>
+          <div class="wf-body">
+            <div class="wf-side">状态 Tab</div>
+            <div class="wf-main">
+              <div class="wf-box">知识列表表格</div>
+              <div class="wf-box">操作区</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>title</td><td>string</td><td>是</td><td>标题</td></tr>
+          <tr><td>space</td><td>string</td><td>是</td><td>所属空间</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>草稿/审核中/已发布</td></tr>
+          <tr><td>updated_at</td><td>datetime</td><td>是</td><td>更新时间</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-create">
+        <h3>新建知识</h3>
+        <div class="wireframe">
+          <div class="wf-top">模板选择 / 保存 / 提交审核</div>
+          <div class="wf-body">
+            <div class="wf-side">结构字段</div>
+            <div class="wf-main">
+              <div class="wf-box">正文编辑区</div>
+              <div class="wf-box">附件与预览</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>title</td><td>string</td><td>是</td><td>标题</td></tr>
+          <tr><td>summary</td><td>string</td><td>否</td><td>摘要</td></tr>
+          <tr><td>content</td><td>text</td><td>是</td><td>正文</td></tr>
+          <tr><td>tags</td><td>array</td><td>否</td><td>标签</td></tr>
+          <tr><td>effective_at</td><td>datetime</td><td>否</td><td>生效时间</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-edit">
+        <h3>知识详情编辑</h3>
+        <div class="wireframe">
+          <div class="wf-top">版本号 / 保存 / 发布新版本</div>
+          <div class="wf-body">
+            <div class="wf-side">版本历史</div>
+            <div class="wf-main">
+              <div class="wf-box">内容编辑区</div>
+              <div class="wf-box">结构字段 + 反馈摘要</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>version</td><td>string</td><td>是</td><td>当前版本</td></tr>
+          <tr><td>owner</td><td>user</td><td>是</td><td>责任人</td></tr>
+          <tr><td>expired_at</td><td>datetime</td><td>否</td><td>失效时间</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>草稿/审核中/发布</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-import">
+        <h3>导入中心</h3>
+        <div class="wireframe">
+          <div class="wf-top">上传文件 / 批量导入 / 导出模板</div>
+          <div class="wf-body">
+            <div class="wf-side">导入模板</div>
+            <div class="wf-main">
+              <div class="wf-box">导入列表</div>
+              <div class="wf-box">失败日志</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>file_name</td><td>string</td><td>是</td><td>文件名</td></tr>
+          <tr><td>mapping_template</td><td>string</td><td>否</td><td>字段映射模板</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>上传/解析/完成</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-review-list">
+        <h3>审核中心列表</h3>
+        <div class="wireframe">
+          <div class="wf-top">筛选 / 批量审核</div>
+          <div class="wf-body">
+            <div class="wf-side">待审 / 已审</div>
+            <div class="wf-main">
+              <div class="wf-box">审核任务列表</div>
+              <div class="wf-box">任务详情预览</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>review_id</td><td>string</td><td>是</td><td>审核任务ID</td></tr>
+          <tr><td>submitter</td><td>user</td><td>是</td><td>提交人</td></tr>
+          <tr><td>space</td><td>string</td><td>是</td><td>所属空间</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>待审/通过/退回</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-review-detail">
+        <h3>审核详情</h3>
+        <div class="wireframe">
+          <div class="wf-top">审核意见 / 通过 / 退回</div>
+          <div class="wf-body">
+            <div class="wf-side">差异对比</div>
+            <div class="wf-main">
+              <div class="wf-box">内容预览</div>
+              <div class="wf-box">审核记录</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>review_comment</td><td>text</td><td>否</td><td>审核意见</td></tr>
+          <tr><td>decision</td><td>enum</td><td>是</td><td>通过/退回/转交</td></tr>
+          <tr><td>diff</td><td>object</td><td>否</td><td>版本差异</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-version">
+        <h3>版本与发布中心</h3>
+        <div class="wireframe">
+          <div class="wf-top">版本列表 / 回滚 / 发布记录</div>
+          <div class="wf-body">
+            <div class="wf-side">版本号</div>
+            <div class="wf-main">
+              <div class="wf-box">版本对比</div>
+              <div class="wf-box">发布记录</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>version</td><td>string</td><td>是</td><td>版本号</td></tr>
+          <tr><td>release_time</td><td>datetime</td><td>是</td><td>发布时间</td></tr>
+          <tr><td>release_note</td><td>text</td><td>否</td><td>发布说明</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-maintain">
+        <h3>维护中心</h3>
+        <div class="wireframe">
+          <div class="wf-top">过期 / 未更新 / 缺字段 / 任务池</div>
+          <div class="wf-body">
+            <div class="wf-side">维护类型</div>
+            <div class="wf-main">
+              <div class="wf-box">维护任务列表</div>
+              <div class="wf-box">指派与进度</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>task_type</td><td>enum</td><td>是</td><td>过期/缺失/低命中</td></tr>
+          <tr><td>assignee</td><td>user</td><td>是</td><td>指派人</td></tr>
+          <tr><td>deadline</td><td>datetime</td><td>否</td><td>截止时间</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>待处理/处理中/完成</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-feedback">
+        <h3>反馈处理中心</h3>
+        <div class="wireframe">
+          <div class="wf-top">筛选 / 批量处理</div>
+          <div class="wf-body">
+            <div class="wf-side">反馈类型</div>
+            <div class="wf-main">
+              <div class="wf-box">反馈列表</div>
+              <div class="wf-box">处理记录</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>feedback_type</td><td>enum</td><td>是</td><td>有效/无效/纠错</td></tr>
+          <tr><td>comment</td><td>text</td><td>否</td><td>反馈内容</td></tr>
+          <tr><td>handler</td><td>user</td><td>否</td><td>处理人</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="ops-quality">
+        <h3>质量分析</h3>
+        <div class="wireframe">
+          <div class="wf-top">指标筛选 / 导出</div>
+          <div class="wf-body">
+            <div class="wf-side">指标类型</div>
+            <div class="wf-main">
+              <div class="wf-box">命中率与负反馈趋势</div>
+              <div class="wf-box">低质量知识列表</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>hit_rate</td><td>percent</td><td>是</td><td>命中率</td></tr>
+          <tr><td>bad_feedback_rate</td><td>percent</td><td>是</td><td>负反馈率</td></tr>
+          <tr><td>low_quality_list</td><td>array</td><td>否</td><td>低质量知识</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- 检索调试台 -->
+    <section class="section" data-domain="debug">
+      <h2 class="domain-title">05 检索调试台</h2>
+
+      <div class="page-card" id="debug-home">
+        <h3>调试首页</h3>
+        <div class="wireframe">
+          <div class="wf-top">快捷测试 / 近期记录</div>
+          <div class="wf-body">
+            <div class="wf-side">策略与Agent</div>
+            <div class="wf-main">
+              <div class="wf-box">近期调试结果</div>
+              <div class="wf-box">异常趋势</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>recent_queries</td><td>array</td><td>是</td><td>最近调试记录</td></tr>
+          <tr><td>error_rate</td><td>percent</td><td>否</td><td>调试失败率</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="debug-query">
+        <h3>Query 测试</h3>
+        <div class="wireframe">
+          <div class="wf-top">选择Agent / 空间 / 策略</div>
+          <div class="wf-body">
+            <div class="wf-side">参数区</div>
+            <div class="wf-main">
+              <div class="wf-box">Query 输入与上下文</div>
+              <div class="wf-box">结果摘要</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>agent_id</td><td>string</td><td>是</td><td>Agent 选择</td></tr>
+          <tr><td>space_id</td><td>string</td><td>是</td><td>知识空间</td></tr>
+          <tr><td>query</td><td>string</td><td>是</td><td>检索问题</td></tr>
+          <tr><td>topk</td><td>number</td><td>是</td><td>召回数量</td></tr>
+          <tr><td>mqa_threshold</td><td>number</td><td>否</td><td>匹配阈值（用于控制可引用边界）</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="debug-recall">
+        <h3>召回结果</h3>
+        <div class="wireframe">
+          <div class="wf-top">召回模式切换 / 导出</div>
+          <div class="wf-body">
+            <div class="wf-side">结果列表</div>
+            <div class="wf-main">
+              <div class="wf-box">Chunk 命中内容</div>
+              <div class="wf-box">分数明细</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>doc_title</td><td>string</td><td>是</td><td>文档标题</td></tr>
+          <tr><td>chunk_content</td><td>text</td><td>是</td><td>命中片段</td></tr>
+          <tr><td>score</td><td>number</td><td>是</td><td>召回分数</td></tr>
+          <tr><td>filter_reason</td><td>string</td><td>否</td><td>过滤原因</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="debug-rerank">
+        <h3>重排分析</h3>
+        <div class="wireframe">
+          <div class="wf-top">模型选择 / 对比视图</div>
+          <div class="wf-body">
+            <div class="wf-side">TopK 列表</div>
+            <div class="wf-main">
+              <div class="wf-box">重排前后对比</div>
+              <div class="wf-box">评分解释</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>rerank_score</td><td>number</td><td>是</td><td>重排分数</td></tr>
+          <tr><td>rank_before</td><td>number</td><td>是</td><td>原始排序</td></tr>
+          <tr><td>rank_after</td><td>number</td><td>是</td><td>重排后排序</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="debug-citation">
+        <h3>引用链路</h3>
+        <div class="wireframe">
+          <div class="wf-top">引用路径 / 版本信息</div>
+          <div class="wf-body">
+            <div class="wf-side">引用节点</div>
+            <div class="wf-main">
+              <div class="wf-box">引用详情</div>
+              <div class="wf-box">来源文档</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>citation_id</td><td>string</td><td>是</td><td>引用ID</td></tr>
+          <tr><td>doc_version</td><td>string</td><td>是</td><td>引用版本</td></tr>
+          <tr><td>source_link</td><td>string</td><td>否</td><td>来源链接</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="debug-fail">
+        <h3>失败问题分析</h3>
+        <div class="wireframe">
+          <div class="wf-top">失败原因 / 归因</div>
+          <div class="wf-body">
+            <div class="wf-side">失败类型</div>
+            <div class="wf-main">
+              <div class="wf-box">失败样本列表</div>
+              <div class="wf-box">优化建议</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>failure_type</td><td>enum</td><td>是</td><td>无结果/权限/超时</td></tr>
+          <tr><td>query</td><td>string</td><td>是</td><td>问题内容</td></tr>
+          <tr><td>suggestion</td><td>text</td><td>否</td><td>优化建议</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="debug-evalset">
+        <h3>评测集管理</h3>
+        <div class="wireframe">
+          <div class="wf-top">新建评测集 / 导入</div>
+          <div class="wf-body">
+            <div class="wf-side">评测集列表</div>
+            <div class="wf-main">
+              <div class="wf-box">样本列表</div>
+              <div class="wf-box">样本编辑</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>evalset_name</td><td>string</td><td>是</td><td>评测集名称</td></tr>
+          <tr><td>sample_query</td><td>string</td><td>是</td><td>样本问题</td></tr>
+          <tr><td>expected_doc</td><td>string</td><td>否</td><td>期望命中文档</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="debug-evalresult">
+        <h3>评测结果</h3>
+        <div class="wireframe">
+          <div class="wf-top">运行评测 / 对比策略</div>
+          <div class="wf-body">
+            <div class="wf-side">指标列表</div>
+            <div class="wf-main">
+              <div class="wf-box">命中率对比</div>
+              <div class="wf-box">失败样本明细</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>eval_rate</td><td>percent</td><td>是</td><td>评测命中率</td></tr>
+          <tr><td>policy_id</td><td>string</td><td>是</td><td>策略ID</td></tr>
+          <tr><td>bad_cases</td><td>array</td><td>否</td><td>失败样本</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- 业务使用端 -->
+    <section class="section" data-domain="biz">
+      <h2 class="domain-title">06 业务使用端</h2>
+
+      <div class="page-card" id="biz-home">
+        <h3>首页 / 搜索入口</h3>
+        <div class="wireframe">
+          <div class="wf-top">搜索框 + 热门问题</div>
+          <div class="wf-body">
+            <div class="wf-side">分类入口</div>
+            <div class="wf-main">
+              <div class="wf-box">推荐知识</div>
+              <div class="wf-box">最新发布</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>search_keyword</td><td>string</td><td>是</td><td>搜索关键词</td></tr>
+          <tr><td>hot_questions</td><td>array</td><td>否</td><td>热门问题</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="biz-category">
+        <h3>分类导航</h3>
+        <div class="wireframe">
+          <div class="wf-top">分类 / 标签筛选</div>
+          <div class="wf-body">
+            <div class="wf-side">分类树</div>
+            <div class="wf-main">
+              <div class="wf-box">分类知识列表</div>
+              <div class="wf-box">排序 / 过滤</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>category_id</td><td>string</td><td>是</td><td>分类ID</td></tr>
+          <tr><td>sort_by</td><td>enum</td><td>否</td><td>时间/热度</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="biz-search">
+        <h3>搜索结果</h3>
+        <div class="wireframe">
+          <div class="wf-top">搜索框 / 高级筛选</div>
+          <div class="wf-body">
+            <div class="wf-side">筛选条件</div>
+            <div class="wf-main">
+              <div class="wf-box">结果卡片列表</div>
+              <div class="wf-box">推荐问题</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>query</td><td>string</td><td>是</td><td>搜索关键词</td></tr>
+          <tr><td>filters</td><td>object</td><td>否</td><td>空间/类型/时间</td></tr>
+          <tr><td>total</td><td>number</td><td>是</td><td>结果总数</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="biz-detail">
+        <h3>知识详情</h3>
+        <div class="wireframe">
+          <div class="wf-top">标题 / 收藏 / 反馈</div>
+          <div class="wf-body">
+            <div class="wf-side">来源与版本</div>
+            <div class="wf-main">
+              <div class="wf-box">正文内容</div>
+              <div class="wf-box">相关知识推荐</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>doc_title</td><td>string</td><td>是</td><td>标题</td></tr>
+          <tr><td>content</td><td>text</td><td>是</td><td>正文</td></tr>
+          <tr><td>version</td><td>string</td><td>是</td><td>版本号</td></tr>
+          <tr><td>feedback</td><td>enum</td><td>否</td><td>有效/无效</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="biz-faq">
+        <h3>FAQ 专题</h3>
+        <div class="wireframe">
+          <div class="wf-top">专题筛选 / 搜索</div>
+          <div class="wf-body">
+            <div class="wf-side">问题分类</div>
+            <div class="wf-main">
+              <div class="wf-box">FAQ 列表</div>
+              <div class="wf-box">展开详情</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>question</td><td>string</td><td>是</td><td>问题</td></tr>
+          <tr><td>answer</td><td>text</td><td>是</td><td>答案</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="biz-fav">
+        <h3>我的收藏</h3>
+        <div class="wireframe">
+          <div class="wf-top">收藏列表 / 取消收藏</div>
+          <div class="wf-body">
+            <div class="wf-side">分类筛选</div>
+            <div class="wf-main">
+              <div class="wf-box">收藏列表</div>
+              <div class="wf-box">排序与标签</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>favorite_id</td><td>string</td><td>是</td><td>收藏ID</td></tr>
+          <tr><td>doc_title</td><td>string</td><td>是</td><td>文档标题</td></tr>
+          <tr><td>collected_at</td><td>datetime</td><td>是</td><td>收藏时间</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="biz-recent">
+        <h3>最近浏览</h3>
+        <div class="wireframe">
+          <div class="wf-top">浏览记录 / 清理</div>
+          <div class="wf-body">
+            <div class="wf-side">时间筛选</div>
+            <div class="wf-main">
+              <div class="wf-box">浏览列表</div>
+              <div class="wf-box">排序</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>viewed_at</td><td>datetime</td><td>是</td><td>浏览时间</td></tr>
+          <tr><td>doc_title</td><td>string</td><td>是</td><td>文档标题</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="biz-feedback">
+        <h3>反馈记录</h3>
+        <div class="wireframe">
+          <div class="wf-top">反馈列表 / 状态</div>
+          <div class="wf-body">
+            <div class="wf-side">反馈类型</div>
+            <div class="wf-main">
+              <div class="wf-box">反馈列表</div>
+              <div class="wf-box">处理结果</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>feedback_id</td><td>string</td><td>是</td><td>反馈ID</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>处理中/已解决</td></tr>
+          <tr><td>comment</td><td>text</td><td>否</td><td>反馈内容</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Agent 集成端 -->
+    <section class="section" data-domain="agent">
+      <h2 class="domain-title">07 Agent 集成端</h2>
+
+      <div class="page-card" id="agent-list">
+        <h3>Agent 列表</h3>
+        <div class="wireframe">
+          <div class="wf-top">新建 Agent / 状态筛选</div>
+          <div class="wf-body">
+            <div class="wf-side">分类</div>
+            <div class="wf-main">
+              <div class="wf-box">Agent 列表</div>
+              <div class="wf-box">快捷操作</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>agent_name</td><td>string</td><td>是</td><td>Agent 名称</td></tr>
+          <tr><td>status</td><td>enum</td><td>是</td><td>启用/停用</td></tr>
+          <tr><td>bind_spaces</td><td>number</td><td>否</td><td>绑定空间数</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="agent-detail">
+        <h3>Agent 详情</h3>
+        <div class="wireframe">
+          <div class="wf-top">基础信息 / 编辑</div>
+          <div class="wf-body">
+            <div class="wf-side">子菜单</div>
+            <div class="wf-main">
+              <div class="wf-box">Agent 基础信息</div>
+              <div class="wf-box">绑定概览</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>agent_desc</td><td>text</td><td>否</td><td>用途说明</td></tr>
+          <tr><td>owner</td><td>user</td><td>是</td><td>负责人</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="agent-bind">
+        <h3>知识绑定配置</h3>
+        <div class="wireframe">
+          <div class="wf-top">绑定空间 / 保存发布</div>
+          <div class="wf-body">
+            <div class="wf-side">空间列表</div>
+            <div class="wf-main">
+              <div class="wf-box">已绑定空间</div>
+              <div class="wf-box">类型与标签限制</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>space_ids</td><td>array</td><td>是</td><td>绑定空间</td></tr>
+          <tr><td>allow_types</td><td>array</td><td>否</td><td>知识类型白名单</td></tr>
+          <tr><td>policy_id</td><td>string</td><td>是</td><td>检索策略</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="agent-policy">
+        <h3>检索策略配置</h3>
+        <div class="wireframe">
+          <div class="wf-top">策略参数 / 保存</div>
+          <div class="wf-body">
+            <div class="wf-side">策略列表</div>
+            <div class="wf-main">
+              <div class="wf-box">TopK / 权重 / 过滤</div>
+              <div class="wf-box">策略版本</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>topk</td><td>number</td><td>是</td><td>召回数量</td></tr>
+          <tr><td>mqa_threshold</td><td>number</td><td>否</td><td>匹配阈值（用于控制引用边界）</td></tr>
+          <tr><td>filter_tags</td><td>array</td><td>否</td><td>标签过滤</td></tr>
+          <tr><td>rerank</td><td>boolean</td><td>是</td><td>是否重排</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="agent-prompt">
+        <h3>Prompt 策略</h3>
+        <div class="wireframe">
+          <div class="wf-top">Prompt 模板 / 版本</div>
+          <div class="wf-body">
+            <div class="wf-side">模板列表</div>
+            <div class="wf-main">
+              <div class="wf-box">Prompt 编辑区</div>
+              <div class="wf-box">变量占位说明</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>prompt_template</td><td>text</td><td>是</td><td>提示词模板</td></tr>
+          <tr><td>variables</td><td>array</td><td>是</td><td>变量定义</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="agent-workflow">
+        <h3>Workflow 节点配置</h3>
+        <div class="wireframe">
+          <div class="wf-top">节点列表 / 保存 / 预览</div>
+          <div class="wf-body">
+            <div class="wf-side">流程节点</div>
+            <div class="wf-main">
+              <div class="wf-box">节点参数映射</div>
+              <div class="wf-box">返回字段配置</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>node_id</td><td>string</td><td>是</td><td>节点ID</td></tr>
+          <tr><td>input_mapping</td><td>object</td><td>是</td><td>输入映射</td></tr>
+          <tr><td>output_fields</td><td>array</td><td>是</td><td>输出字段</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="agent-monitor">
+        <h3>调用监控</h3>
+        <div class="wireframe">
+          <div class="wf-top">时间筛选 / 导出</div>
+          <div class="wf-body">
+            <div class="wf-side">指标</div>
+            <div class="wf-main">
+              <div class="wf-box">指标卡与趋势</div>
+              <div class="wf-box">失败原因与明细</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>call_count</td><td>number</td><td>是</td><td>调用量</td></tr>
+          <tr><td>citation_rate</td><td>percent</td><td>是</td><td>引用率</td></tr>
+          <tr><td>avg_latency</td><td>number</td><td>是</td><td>平均延时</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="agent-citation">
+        <h3>引用展示配置</h3>
+        <div class="wireframe">
+          <div class="wf-top">展示字段 / 证据链</div>
+          <div class="wf-body">
+            <div class="wf-side">展示模板</div>
+            <div class="wf-main">
+              <div class="wf-box">字段选择</div>
+              <div class="wf-box">展示预览</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>display_fields</td><td>array</td><td>是</td><td>展示字段</td></tr>
+          <tr><td>show_version</td><td>boolean</td><td>是</td><td>展示版本号</td></tr>
+          <tr><td>show_source</td><td>boolean</td><td>是</td><td>展示来源链接</td></tr>
+        </table>
+      </div>
+
+      <div class="page-card" id="agent-api">
+        <h3>API / Key 文档</h3>
+        <div class="wireframe">
+          <div class="wf-top">API 文档 / Key 管理</div>
+          <div class="wf-body">
+            <div class="wf-side">接口列表</div>
+            <div class="wf-main">
+              <div class="wf-box">接口文档</div>
+              <div class="wf-box">Key 管理</div>
+            </div>
+          </div>
+        </div>
+        <h4>字段说明</h4>
+        <table>
+          <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>api_key</td><td>string</td><td>是</td><td>访问密钥</td></tr>
+          <tr><td>endpoint</td><td>string</td><td>是</td><td>接口地址</td></tr>
+          <tr><td>method</td><td>enum</td><td>是</td><td>GET/POST</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>08 交付说明</h2>
+      <p>本稿为可视化原型与页面字段说明的组合稿，适合作为：</p>
+      <ul>
+        <li>UI 设计视觉稿的结构底图</li>
+        <li>PRD 子文档的页面说明索引</li>
+        <li>前后端协作时的页面与字段对齐基准</li>
+      </ul>
+      <p>如需输出高保真视觉稿（Figma/Sketch 风格）或导出 PNG/PDF，请告知品牌色、字体规范与企业视觉规范。</p>
+    </section>
+  </div>
+
+  <div class="modal-overlay" data-modal="create">
+    <div class="modal">
+      <h3>新建知识</h3>
+      <p class="muted">模拟新建知识弹窗，展示模板选择与草稿保存流程。</p>
+      <div class="component-demo">
+        <input class="input" placeholder="标题" />
+        <input class="input" placeholder="所属空间" />
+        <span class="tag">FAQ 模板</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" data-close-modal type="button">取消</button>
+        <button class="btn primary" type="button">保存草稿</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" data-modal="bind">
+    <div class="modal">
+      <h3>Agent 绑定配置</h3>
+      <p class="muted">模拟绑定知识空间与策略，体现阈值控制与策略发布。</p>
+      <div class="component-demo">
+        <input class="input" placeholder="Agent 名称" />
+        <input class="input" placeholder="绑定空间" />
+        <span class="tag">策略：混合检索 + 阈值</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" data-close-modal type="button">取消</button>
+        <button class="btn primary" type="button">保存发布</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" data-modal="maintain">
+    <div class="modal">
+      <h3>指派维护任务</h3>
+      <p class="muted">模拟维护任务指派与截止时间设置。</p>
+      <div class="component-demo">
+        <input class="input" placeholder="责任人" />
+        <input class="input" placeholder="截止时间" />
+        <span class="tag">原因：低命中 / 负反馈</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" data-close-modal type="button">取消</button>
+        <button class="btn primary" type="button">确认指派</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const roleLabels = {
+      ai: "AI 产品经理",
+      admin: "平台管理员",
+      ops: "知识运营",
+      owner: "业务负责人"
+    };
+    const roleDomains = {
+      ai: ["debug", "agent", "ops", "admin"],
+      admin: ["admin", "ops", "debug", "agent"],
+      ops: ["ops", "admin", "debug"],
+      owner: ["ops", "debug", "agent"]
+    };
+
+    const roleGroup = document.querySelector("[data-role-group]");
+    const roleButtons = roleGroup ? roleGroup.querySelectorAll(".pill") : [];
+    const roleLabel = document.getElementById("demo-role");
+    const stateRole = document.getElementById("state-role");
+    const toggleBiz = document.getElementById("toggle-biz");
+    const domainSections = document.querySelectorAll("section[data-domain]");
+
+    let currentRole = "ai";
+
+    function applyRole(roleKey) {
+      currentRole = roleKey;
+      const label = roleLabels[roleKey] || "AI 产品经理";
+      if (roleLabel) roleLabel.textContent = label;
+      if (stateRole) stateRole.textContent = label;
+
+      const allowed = new Set(roleDomains[roleKey] || []);
+      if (toggleBiz && toggleBiz.checked) {
+        allowed.add("biz");
+      }
+
+      domainSections.forEach((section) => {
+        const domain = section.dataset.domain;
+        section.classList.toggle("hidden", !allowed.has(domain));
+      });
+    }
+
+    roleButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        roleButtons.forEach((item) => item.classList.remove("active"));
+        btn.classList.add("active");
+        applyRole(btn.dataset.role || "ai");
+      });
+    });
+
+    if (toggleBiz) {
+      toggleBiz.addEventListener("change", () => applyRole(currentRole));
+    }
+
+    const thresholdInput = document.getElementById("mqa-threshold");
+    const mqaValue = document.getElementById("mqa-value");
+    const mqaQuestion = document.getElementById("mqa-question");
+    const mqaCount = document.getElementById("mqa-count");
+    const stateThreshold = document.getElementById("state-threshold");
+    const stateCount = document.getElementById("state-count");
+    const mqaRows = document.querySelectorAll("#mqa-list .score-row");
+    const mqaRun = document.getElementById("mqa-run");
+    const mqaQueryInput = document.getElementById("mqa-query");
+
+    function updateMQA() {
+      if (!thresholdInput) return;
+      const threshold = parseFloat(thresholdInput.value);
+      if (mqaValue) mqaValue.textContent = threshold.toFixed(2);
+      if (stateThreshold) stateThreshold.textContent = threshold.toFixed(2);
+
+      let count = 0;
+      mqaRows.forEach((row) => {
+        const score = parseFloat(row.dataset.score || "0");
+        const active = score >= threshold;
+        row.classList.toggle("is-active", active);
+        if (active) count += 1;
+      });
+
+      if (mqaCount) mqaCount.textContent = String(count);
+      if (stateCount) stateCount.textContent = String(count);
+    }
+
+    if (thresholdInput) {
+      thresholdInput.addEventListener("input", updateMQA);
+    }
+
+    if (mqaRun) {
+      mqaRun.addEventListener("click", () => {
+        if (mqaQueryInput && mqaQuestion && mqaQueryInput.value.trim()) {
+          mqaQuestion.textContent = mqaQueryInput.value.trim();
+        }
+        updateMQA();
+      });
+    }
+
+    const openButtons = document.querySelectorAll("[data-open-modal]");
+    const closeButtons = document.querySelectorAll("[data-close-modal]");
+    const overlays = document.querySelectorAll(".modal-overlay");
+
+    openButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.openModal;
+        const overlay = document.querySelector(`.modal-overlay[data-modal="${target}"]`);
+        if (overlay) overlay.classList.add("active");
+      });
+    });
+
+    closeButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const overlay = btn.closest(".modal-overlay");
+        if (overlay) overlay.classList.remove("active");
+      });
+    });
+
+    overlays.forEach((overlay) => {
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) {
+          overlay.classList.remove("active");
+        }
+      });
+    });
+
+    applyRole("ai");
+    updateMQA();
+  </script>
+</body>
+</html>

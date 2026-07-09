@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识库平台功能架构图 + 用户角色图 + 页面地图</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #fff;
+            padding: 40px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 标题样式 */
+        h1 {
+            font-size: 28px;
+            color: #1a1a2e;
+            margin: 40px 0 20px 0;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #4361ee;
+            page-break-after: avoid;
+        }
+        
+        h1:first-of-type {
+            margin-top: 0;
+            font-size: 32px;
+            text-align: center;
+            border-bottom: none;
+            padding-bottom: 10px;
+            color: #16213e;
+        }
+        
+        h2 {
+            font-size: 22px;
+            color: #16213e;
+            margin: 35px 0 18px 0;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            page-break-after: avoid;
+        }
+        
+        h3 {
+            font-size: 18px;
+            color: #4361ee;
+            margin: 25px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #4361ee;
+            page-break-after: avoid;
+        }
+        
+        h4 {
+            font-size: 16px;
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+        
+        /* 段落和列表 */
+        p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 15px 0 15px 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        li ul, li ol {
+            margin: 5px 0 5px 20px;
+        }
+        
+        /* 强调文本 */
+        strong {
+            color: #16213e;
+            font-weight: 600;
+        }
+        
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            page-break-inside: avoid;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        th {
+            padding: 14px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f8f9ff;
+        }
+        
+        tbody tr:hover {
+            background-color: #eef2ff;
+        }
+        
+        /* 分隔线 */
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, #4361ee 0%, #764ba2 50%, #4361ee 100%);
+            margin: 40px 0;
+            opacity: 0.3;
+        }
+        
+        /* Mermaid图表容器 */
+        .mermaid-container {
+            background: linear-gradient(135deg, #f5f7ff 0%, #fff5f5 100%);
+            border: 1px solid #e0e6ff;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+            overflow-x: auto;
+            page-break-inside: avoid;
+        }
+        
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        
+        /* 引用块样式 */
+        blockquote {
+            background: #f8f9ff;
+            border-left: 4px solid #4361ee;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* 代码块 */
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "Consolas", "Monaco", monospace;
+            font-size: 14px;
+        }
+        
+        /* 提示框 */
+        .tip-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff5f5 100%);
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 20px 0;
+        }
+        
+        .tip-box::before {
+            content: "💡 提示：";
+            font-weight: 600;
+            color: #d4a500;
+        }
+        
+        /* 文档定位区域 */
+        .doc-intro {
+            background: linear-gradient(135deg, #e8f4fd 0%, #f0e6ff 100%);
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin: 20px 0 30px 0;
+        }
+        
+        .doc-intro h3 {
+            border-left: none;
+            padding-left: 0;
+            color: #333;
+            margin-top: 0;
+        }
+        
+        /* 模块卡片样式 */
+        .module-card {
+            background: white;
+            border: 1px solid #e0e6ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(67, 97, 238, 0.1);
+        }
+        
+        /* 打印样式 */
+        @media print {
+            body {
+                padding: 20px 40px;
+            }
+            
+            .mermaid-container {
+                break-inside: avoid;
+            }
+            
+            h1, h2, h3 {
+                break-after: avoid;
+            }
+            
+            table {
+                break-inside: avoid;
+            }
+        }
+        
+        /* 页面分隔提示 */
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* 导航建议列表 */
+        .nav-list {
+            background: #f8f9ff;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 15px 0;
+        }
+        
+        .nav-list ol {
+            margin-left: 20px;
+        }
+        
+        /* 优先级标签 */
+        .priority-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        .priority-p0 {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .priority-p1 {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .priority-p2 {
+            background: #d1fae5;
+            color: #059669;
+        }
+    </style>
+</head>
+<body>
+    <h1>知识库平台功能架构图 + 用户角色图 + 页面地图</h1>
+    
+    <div class="doc-intro">
+        <h3>📄 文档定位</h3>
+        <p>这份文档是"面向 Agent 工作流的企业级知识中台"从整体方案进入产品设计阶段的第一份骨架文档。</p>
+        <p><strong>它解决 3 个问题：</strong></p>
+        <ol>
+            <li>平台有哪些核心能力，彼此如何分层</li>
+            <li>平台有哪些角色，分别做什么，如何协作</li>
+            <li>平台应该有哪些页面，各端怎么组织导航</li>
+        </ol>
+        <p><strong>这份内容后面可以直接衔接：</strong></p>
+        <ul>
+            <li>交互原型图</li>
+            <li>高保真设计图</li>
+            <li>PRD 文档</li>
+            <li>字段与状态机设计</li>
+            <li>Agent 联动展示页</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h1>1. 平台整体功能架构图</h1>
+
+    <h2>1.1 总体功能架构</h2>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart TB
+    A[知识库平台 / 企业级知识中台]
+
+    A --> B1[接入层]
+    A --> B2[处理层]
+    A --> B3[治理层]
+    A --> B4[服务层]
+    A --> B5[运营层]
+    A --> B6[平台管理层]
+
+    B1 --> C11[手工录入]
+    B1 --> C12[模板录入]
+    B1 --> C13[文件导入]
+    B1 --> C14[第三方同步]
+    B1 --> C15[API接入]
+
+    B2 --> C21[文档解析]
+    B2 --> C22[文本清洗]
+    B2 --> C23[切片Chunking]
+    B2 --> C24[标签分类]
+    B2 --> C25[去重合并]
+    B2 --> C26[向量化/索引构建]
+
+    B3 --> C31[审核发布]
+    B3 --> C32[版本管理]
+    B3 --> C33[生命周期管理]
+    B3 --> C34[责任人机制]
+    B3 --> C35[质量校验]
+    B3 --> C36[权限控制]
+
+    B4 --> C41[全文检索]
+    B4 --> C42[语义检索]
+    B4 --> C43[混合召回]
+    B4 --> C44[结果重排]
+    B4 --> C45[引用返回]
+    B4 --> C46[Agent/RAG API]
+    B4 --> C47[Workflow节点调用]
+
+    B5 --> C51[搜索分析]
+    B5 --> C52[问答命中分析]
+    B5 --> C53[零结果分析]
+    B5 --> C54[热门知识排行]
+    B5 --> C55[反馈闭环]
+    B5 --> C56[维护任务看板]
+
+    B6 --> C61[组织与租户管理]
+    B6 --> C62[角色权限管理]
+    B6 --> C63[空间与目录配置]
+    B6 --> C64[模板与词库配置]
+    B6 --> C65[模型与检索策略配置]
+    B6 --> C66[日志审计与安全配置]
+        </pre>
+    </div>
+
+    <hr>
+
+    <h2>1.2 按业务视角拆解的 10 大模块</h2>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+mindmap
+  root((知识库平台))
+    知识空间管理
+      空间创建
+      目录树
+      空间权限
+      负责人
+    知识录入采集
+      手工录入
+      FAQ模板
+      文件导入
+      外部同步
+    知识编辑建模
+      富文本编辑
+      结构化字段
+      标签分类
+      关联知识
+    审核发布中心
+      草稿
+      审核中
+      已发布
+      已下线
+      版本回滚
+    检索召回中心
+      全文搜索
+      语义检索
+      混合检索
+      重排
+    Agent集成中心
+      Agent绑定空间
+      检索策略
+      Prompt策略
+      调试回放
+      引用返回
+    质量维护中心
+      过期提醒
+      长期未更新
+      冲突检测
+      维护任务
+    权限安全中心
+      RBAC
+      文档权限
+      API鉴权
+      审计日志
+    运营分析中心
+      命中率
+      零结果率
+      热门问题
+      反馈统计
+    系统配置中心
+      模型配置
+      词库管理
+      通知配置
+      Webhook/API Key
+        </pre>
+    </div>
+
+    <hr>
+
+    <h2>1.3 平台能力到前台/后台的映射</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>能力域</th>
+                <th>管理后台</th>
+                <th>运营工作台</th>
+                <th>检索调试台</th>
+                <th>业务使用端</th>
+                <th>Agent集成端</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>知识空间管理</strong></td>
+                <td>是</td>
+                <td>部分可见</td>
+                <td>否</td>
+                <td>否</td>
+                <td>部分可见</td>
+            </tr>
+            <tr>
+                <td><strong>知识录入与编辑</strong></td>
+                <td>部分</td>
+                <td>是</td>
+                <td>否</td>
+                <td>否</td>
+                <td>否</td>
+            </tr>
+            <tr>
+                <td><strong>审核发布</strong></td>
+                <td>是</td>
+                <td>是</td>
+                <td>否</td>
+                <td>否</td>
+                <td>否</td>
+            </tr>
+            <tr>
+                <td><strong>检索召回</strong></td>
+                <td>配置</td>
+                <td>部分</td>
+                <td>是</td>
+                <td>是</td>
+                <td>是</td>
+            </tr>
+            <tr>
+                <td><strong>Agent 绑定</strong></td>
+                <td>配置</td>
+                <td>否</td>
+                <td>部分验证</td>
+                <td>否</td>
+                <td>是</td>
+            </tr>
+            <tr>
+                <td><strong>维护与质量</strong></td>
+                <td>是</td>
+                <td>是</td>
+                <td>部分</td>
+                <td>否</td>
+                <td>部分</td>
+            </tr>
+            <tr>
+                <td><strong>运营分析</strong></td>
+                <td>是</td>
+                <td>是</td>
+                <td>是</td>
+                <td>否</td>
+                <td>是</td>
+            </tr>
+            <tr>
+                <td><strong>权限与安全</strong></td>
+                <td>是</td>
+                <td>否</td>
+                <td>否</td>
+                <td>否</td>
+                <td>部分</td>
+            </tr>
+            <tr>
+                <td><strong>系统配置</strong></td>
+                <td>是</td>
+                <td>否</td>
+                <td>部分</td>
+                <td>否</td>
+                <td>部分</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>1.4 功能架构设计要点</h2>
+
+    <h3>A. 平台不是一个端，而是五个工作域</h3>
+    <p>建议产品设计时从一开始就拆成 5 个工作域：</p>
+    <ol>
+        <li>管理后台</li>
+        <li>知识运营工作台</li>
+        <li>检索调试台</li>
+        <li>业务使用端</li>
+        <li>Agent 集成端</li>
+    </ol>
+    <p>如果把这些全部揉成一个后台，后面导航会很乱，角色权限也会变复杂。</p>
+
+    <h3>B. 录入、治理、服务、运营必须闭环</h3>
+    <p>功能架构必须支持这条主链路：</p>
+    <p><strong>知识进入 → 被治理 → 被召回 → 被引用 → 被反馈 → 被维护</strong></p>
+
+    <h3>C. Agent 集成必须独立成一级模块</h3>
+    <p>不要把 Agent 绑定和检索调试埋在"系统设置"里。那样很快就会变成没人敢碰的黑盒角落。</p>
+
+    <hr>
+    <div class="page-break"></div>
+
+    <h1>2. 用户角色图</h1>
+
+    <h2>2.1 用户角色总览</h2>
+    <p>平台建议采用"平台治理角色 + 内容生产角色 + AI集成角色 + 使用消费角色"四层角色体系。</p>
+
+    <h3>一层：平台治理角色</h3>
+    <ul>
+        <li>平台管理员</li>
+        <li>安全/审计人员</li>
+    </ul>
+
+    <h3>二层：知识生产与治理角色</h3>
+    <ul>
+        <li>知识管理员 / 知识运营</li>
+        <li>录入人员 / 编辑人员</li>
+        <li>审核人员</li>
+        <li>业务负责人</li>
+    </ul>
+
+    <h3>三层：AI 集成角色</h3>
+    <ul>
+        <li>Agent 配置人员 / AI 产品经理</li>
+        <li>工作流编排人员 / 应用开发人员</li>
+    </ul>
+
+    <h3>四层：知识消费角色</h3>
+    <ul>
+        <li>普通业务用户</li>
+        <li>业务系统 / 外部系统</li>
+        <li>Agent / Copilot / 智能助手</li>
+    </ul>
+
+    <hr>
+
+    <h2>2.2 用户角色关系图</h2>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart LR
+    A[平台管理员]
+    B[知识管理员/运营]
+    C[录入人员/编辑人员]
+    D[审核人员]
+    E[业务负责人]
+    F[Agent配置人员/AI产品经理]
+    G[工作流编排人员/应用开发]
+    H[普通业务用户]
+    I[Agent/Copilot]
+    J[安全/审计人员]
+
+    A --> B
+    A --> D
+    A --> J
+    B --> C
+    B --> D
+    B --> E
+    C --> D
+    D --> E
+    E --> B
+    F --> I
+    G --> I
+    F --> B
+    F --> A
+    H --> I
+    H --> B
+    I --> B
+    J --> A
+    J --> B
+        </pre>
+    </div>
+
+    <div class="tip-box">
+        这张图可以这么理解：平台管理员负责搭平台和设规则；知识管理员负责把平台跑起来；编辑与审核负责把知识变成可信内容；AI 产品经理把知识真正接到 Agent 上；普通用户和 Agent 是最终消费知识的人/系统；安全审计负责兜底。
+    </div>
+
+    <hr>
+
+    <h2>2.3 角色职责矩阵</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>角色</th>
+                <th>核心职责</th>
+                <th>重点页面</th>
+                <th>关键权限</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>平台管理员</strong></td>
+                <td>平台配置、组织与权限、模型策略、安全审计</td>
+                <td>管理后台</td>
+                <td>全局配置、角色授权、系统配置</td>
+            </tr>
+            <tr>
+                <td><strong>知识管理员/运营</strong></td>
+                <td>空间规划、模板管理、质量运营、维护闭环</td>
+                <td>管理后台、运营工作台</td>
+                <td>空间管理、模板管理、运营分析</td>
+            </tr>
+            <tr>
+                <td><strong>录入人员/编辑人员</strong></td>
+                <td>创建知识、补全字段、提交审核</td>
+                <td>运营工作台</td>
+                <td>新建/编辑草稿、导入文档</td>
+            </tr>
+            <tr>
+                <td><strong>审核人员</strong></td>
+                <td>审核知识准确性与合规性、发布与退回</td>
+                <td>运营工作台、审核中心</td>
+                <td>审核、发布、退回、查看版本</td>
+            </tr>
+            <tr>
+                <td><strong>业务负责人</strong></td>
+                <td>对业务域知识负责、审批关键内容</td>
+                <td>审核中心、看板</td>
+                <td>审批、查看域内质量与使用情况</td>
+            </tr>
+            <tr>
+                <td><strong>Agent配置人员/AI产品经理</strong></td>
+                <td>Agent绑定知识空间、检索策略调试、效果优化</td>
+                <td>Agent集成端、检索调试台</td>
+                <td>配置绑定、查看调试日志、策略配置</td>
+            </tr>
+            <tr>
+                <td><strong>工作流编排/应用开发</strong></td>
+                <td>在流程/应用中调用知识服务</td>
+                <td>Agent集成端</td>
+                <td>调用API、配置Workflow节点</td>
+            </tr>
+            <tr>
+                <td><strong>普通业务用户</strong></td>
+                <td>搜索知识、查看详情、反馈纠错</td>
+                <td>业务使用端</td>
+                <td>搜索、查看授权知识、提交反馈</td>
+            </tr>
+            <tr>
+                <td><strong>Agent/Copilot</strong></td>
+                <td>检索知识并返回答案与引用</td>
+                <td>Agent集成端（间接）</td>
+                <td>按绑定策略调用知识服务</td>
+            </tr>
+            <tr>
+                <td><strong>安全/审计人员</strong></td>
+                <td>检查权限、审计日志、敏感访问</td>
+                <td>管理后台</td>
+                <td>查看审计、权限检查、合规分析</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>2.4 推荐的权限模型</h2>
+
+    <h3>一期建议</h3>
+    <p>采用：</p>
+    <ul>
+        <li><strong>RBAC 为主</strong></li>
+        <li><strong>空间级 + 文档级权限控制</strong></li>
+        <li><strong>Agent 侧调用继承空间权限策略</strong></li>
+    </ul>
+
+    <h3>后续扩展</h3>
+    <p>预留：</p>
+    <ul>
+        <li>字段级权限</li>
+        <li>基于标签/部门/密级的 ABAC 扩展</li>
+        <li>特定 Agent 白名单策略</li>
+    </ul>
+
+    <hr>
+
+    <h2>2.5 角色协作主流程</h2>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+sequenceDiagram
+    participant Editor as 编辑人员
+    participant Reviewer as 审核人员
+    participant Biz as 业务负责人
+    participant Ops as 知识运营
+    participant AI as AI产品经理
+    participant Agent as Agent
+    participant User as 业务用户
+
+    Editor->>Reviewer: 提交知识审核
+    Reviewer->>Biz: 关键知识申请确认（可选）
+    Biz-->>Reviewer: 审批通过
+    Reviewer-->>Ops: 发布知识
+    Ops-->>AI: 知识已可接入Agent
+    AI->>Agent: 绑定知识空间与检索策略
+    User->>Agent: 发起问题
+    Agent->>User: 返回答案+引用
+    User->>Ops: 点踩/纠错/反馈
+    Ops->>Editor: 生成维护任务
+        </pre>
+    </div>
+
+    <hr>
+    <div class="page-break"></div>
+
+    <h1>3. 页面地图</h1>
+    <p>这里的页面地图不是简单列菜单，而是按端来组织信息架构。这样后面做原型才不会乱。</p>
+
+    <hr>
+
+    <h2>3.1 总体页面地图</h2>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart TB
+    A[知识库平台]
+
+    A --> B1[管理后台]
+    A --> B2[知识运营工作台]
+    A --> B3[检索调试台]
+    A --> B4[业务使用端]
+    A --> B5[Agent集成端]
+        </pre>
+    </div>
+
+    <hr>
+
+    <h2>3.2 管理后台页面地图</h2>
+
+    <h3>适用角色</h3>
+    <ul>
+        <li>平台管理员</li>
+        <li>知识管理员</li>
+        <li>安全/审计人员</li>
+    </ul>
+
+    <h3>页面结构</h3>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart TB
+    A[管理后台]
+    A --> A1[首页仪表盘]
+    A --> A2[组织与角色权限]
+    A --> A3[知识空间管理]
+    A --> A4[分类/标签/词库管理]
+    A --> A5[模板管理]
+    A --> A6[数据源管理]
+    A --> A7[模型与检索策略配置]
+    A --> A8[通知与集成配置]
+    A --> A9[日志与审计中心]
+    A --> A10[系统设置]
+
+    A3 --> A31[空间列表]
+    A3 --> A32[新建/编辑空间]
+    A3 --> A33[目录结构配置]
+    A3 --> A34[空间权限配置]
+
+    A6 --> A61[数据源列表]
+    A6 --> A62[导入任务管理]
+    A6 --> A63[同步任务管理]
+
+    A7 --> A71[Embedding模型配置]
+    A7 --> A72[Rerank配置]
+    A7 --> A73[检索策略配置]
+    A7 --> A74[查询改写配置]
+        </pre>
+    </div>
+
+    <h3>管理后台导航建议</h3>
+    <div class="nav-list">
+        <ol>
+            <li>首页仪表盘</li>
+            <li>知识组织
+                <ul>
+                    <li>知识空间管理</li>
+                    <li>分类管理</li>
+                    <li>标签管理</li>
+                    <li>词库管理</li>
+                </ul>
+            </li>
+            <li>平台配置
+                <ul>
+                    <li>模板管理</li>
+                    <li>数据源管理</li>
+                    <li>模型配置</li>
+                    <li>检索策略配置</li>
+                </ul>
+            </li>
+            <li>权限安全
+                <ul>
+                    <li>用户与角色</li>
+                    <li>权限策略</li>
+                    <li>审计日志</li>
+                </ul>
+            </li>
+            <li>系统管理
+                <ul>
+                    <li>通知配置</li>
+                    <li>API / Webhook</li>
+                    <li>系统设置</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2>3.3 知识运营工作台页面地图</h2>
+
+    <h3>适用角色</h3>
+    <ul>
+        <li>知识管理员 / 运营</li>
+        <li>编辑人员</li>
+        <li>审核人员</li>
+        <li>业务负责人</li>
+    </ul>
+
+    <h3>页面结构</h3>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart TB
+    B[知识运营工作台]
+    B --> B1[工作台首页]
+    B --> B2[我的知识]
+    B --> B3[新建知识]
+    B --> B4[导入中心]
+    B --> B5[审核中心]
+    B --> B6[版本与发布中心]
+    B --> B7[维护中心]
+    B --> B8[反馈处理中心]
+    B --> B9[质量分析]
+
+    B2 --> B21[草稿箱]
+    B2 --> B22[待审核]
+    B2 --> B23[已发布]
+    B2 --> B24[已下线]
+
+    B3 --> B31[FAQ模板]
+    B3 --> B32[产品说明模板]
+    B3 --> B33[SOP模板]
+    B3 --> B34[规则模板]
+    B3 --> B35[案例模板]
+
+    B5 --> B51[待审核列表]
+    B5 --> B52[审核详情]
+    B5 --> B53[差异对比]
+
+    B7 --> B71[过期知识]
+    B7 --> B72[长期未更新]
+    B7 --> B73[缺失字段]
+    B7 --> B74[维护任务池]
+        </pre>
+    </div>
+
+    <h3>运营工作台导航建议</h3>
+    <div class="nav-list">
+        <ol>
+            <li>工作台首页</li>
+            <li>我的知识</li>
+            <li>新建知识</li>
+            <li>导入中心</li>
+            <li>审核中心</li>
+            <li>发布与版本</li>
+            <li>维护中心</li>
+            <li>用户反馈</li>
+            <li>质量分析</li>
+        </ol>
+    </div>
+
+    <h3>原型重点页面</h3>
+    <p>后面做原型时，这几个页优先级最高：</p>
+    <ul>
+        <li>新建知识页</li>
+        <li>知识详情编辑页</li>
+        <li>审核详情页</li>
+        <li>版本对比页</li>
+        <li>维护任务页</li>
+    </ul>
+
+    <hr>
+
+    <h2>3.4 检索调试台页面地图</h2>
+
+    <h3>适用角色</h3>
+    <ul>
+        <li>AI 产品经理</li>
+        <li>检索策略配置人员</li>
+        <li>算法 / 数据人员</li>
+        <li>平台管理员（部分）</li>
+    </ul>
+
+    <h3>页面结构</h3>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart TB
+    C[检索调试台]
+    C --> C1[调试首页]
+    C --> C2[Query测试页]
+    C --> C3[召回结果页]
+    C --> C4[重排分析页]
+    C --> C5[引用链路页]
+    C --> C6[失败问题分析]
+    C --> C7[评测集管理]
+    C --> C8[评测结果页]
+
+    C2 --> C21[输入Query]
+    C2 --> C22[选择Agent]
+    C2 --> C23[选择知识空间]
+    C2 --> C24[选择检索策略]
+
+    C3 --> C31[关键词召回结果]
+    C3 --> C32[向量召回结果]
+    C3 --> C33[混合召回结果]
+    C3 --> C34[权限过滤原因]
+
+    C5 --> C51[最终引用片段]
+    C5 --> C52[来源文档]
+    C5 --> C53[版本信息]
+        </pre>
+    </div>
+
+    <h3>调试台导航建议</h3>
+    <div class="nav-list">
+        <ol>
+            <li>Query 测试</li>
+            <li>召回结果</li>
+            <li>重排分析</li>
+            <li>引用链路</li>
+            <li>失败问题分析</li>
+            <li>评测集管理</li>
+            <li>评测结果</li>
+        </ol>
+    </div>
+
+    <h3>调试台必须做的 4 个页面</h3>
+    <p>如果你想让平台后面真能调优，这 4 页一页都不能少：</p>
+    <ul>
+        <li>Query 测试页</li>
+        <li>召回结果页</li>
+        <li>引用链路页</li>
+        <li>失败问题分析页</li>
+    </ul>
+
+    <hr>
+
+    <h2>3.5 业务使用端页面地图</h2>
+
+    <h3>适用角色</h3>
+    <ul>
+        <li>普通业务用户</li>
+        <li>客服</li>
+        <li>销售</li>
+        <li>运营</li>
+        <li>内部员工</li>
+    </ul>
+
+    <h3>页面结构</h3>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart TB
+    D[业务使用端]
+    D --> D1[首页/搜索入口]
+    D --> D2[分类导航]
+    D --> D3[搜索结果页]
+    D --> D4[知识详情页]
+    D --> D5[FAQ专题页]
+    D --> D6[我的收藏]
+    D --> D7[反馈与纠错]
+    D --> D8[最近浏览]
+        </pre>
+    </div>
+
+    <h3>业务使用端导航建议</h3>
+    <div class="nav-list">
+        <ol>
+            <li>首页</li>
+            <li>分类导航</li>
+            <li>FAQ 专题</li>
+            <li>我的收藏</li>
+            <li>最近浏览</li>
+            <li>反馈记录</li>
+        </ol>
+    </div>
+
+    <h3>业务端体验原则</h3>
+    <ul>
+        <li>搜索必须足够快</li>
+        <li>结果必须可读</li>
+        <li>引用来源要清楚</li>
+        <li>反馈入口要简单</li>
+        <li>不要把后台概念带给普通用户</li>
+    </ul>
+
+    <hr>
+
+    <h2>3.6 Agent 集成端页面地图</h2>
+
+    <h3>适用角色</h3>
+    <ul>
+        <li>AI 产品经理</li>
+        <li>应用开发</li>
+        <li>工作流编排人员</li>
+        <li>平台管理员（部分）</li>
+    </ul>
+
+    <h3>页面结构</h3>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart TB
+    E[Agent集成端]
+    E --> E1[Agent列表]
+    E --> E2[Agent详情]
+    E --> E3[知识绑定配置]
+    E --> E4[检索策略配置]
+    E --> E5[Prompt/上下文策略]
+    E --> E6[Workflow节点配置]
+    E --> E7[调用监控]
+    E --> E8[引用展示配置]
+    E --> E9[接口文档/API Key]
+
+    E2 --> E21[基础信息]
+    E2 --> E22[绑定知识空间]
+    E2 --> E23[绑定知识类型]
+    E2 --> E24[绑定模板/标签]
+
+    E6 --> E61[节点列表]
+    E6 --> E62[节点参数配置]
+    E6 --> E63[节点调用预览]
+
+    E7 --> E71[调用次数]
+    E7 --> E72[命中率]
+    E7 --> E73[失败原因]
+    E7 --> E74[延时监控]
+        </pre>
+    </div>
+
+    <h3>Agent 集成端导航建议</h3>
+    <div class="nav-list">
+        <ol>
+            <li>Agent 列表</li>
+            <li>Agent 详情</li>
+            <li>知识绑定</li>
+            <li>检索策略</li>
+            <li>Prompt 策略</li>
+            <li>Workflow 节点配置</li>
+            <li>调用监控</li>
+            <li>API / Key 管理</li>
+        </ol>
+    </div>
+
+    <h3>后续一定要重点设计的页面</h3>
+    <ul>
+        <li>Agent 绑定知识空间页</li>
+        <li>检索策略配置页</li>
+        <li>Workflow 节点配置页</li>
+        <li>调用监控页</li>
+    </ul>
+
+    <hr>
+    <div class="page-break"></div>
+
+    <h1>4. 跨端页面关系图</h1>
+
+    <h2>4.1 端与端之间的配合关系</h2>
+    
+    <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart LR
+    A[管理后台]
+    B[知识运营工作台]
+    C[检索调试台]
+    D[业务使用端]
+    E[Agent集成端]
+
+    A --> B
+    A --> C
+    A --> E
+    B --> C
+    B --> D
+    C --> E
+    E --> D
+        </pre>
+    </div>
+
+    <div class="tip-box">
+        关系解释：管理后台负责规则和底座；运营工作台负责内容生产与治理；检索调试台负责效果验证；Agent 集成端负责把知识接到 Agent；业务使用端负责最终消费。
+    </div>
+
+    <hr>
+
+    <h2>4.2 页面流转主链路</h2>
+
+    <h3>链路一：知识生产链路</h3>
+    <p><strong>管理后台配置空间/模板 → 运营工作台录入知识 → 审核发布 → 进入检索服务</strong></p>
+
+    <h3>链路二：Agent 接入链路</h3>
+    <p><strong>管理后台配置检索策略 → Agent 集成端绑定知识空间 → 检索调试台验证 → Agent 正式调用</strong></p>
+
+    <h3>链路三：用户反馈优化链路</h3>
+    <p><strong>业务使用端查看知识/答案 → 提交反馈 → 运营工作台处理 → 调试台复盘 → 再次发布优化版本</strong></p>
+
+    <hr>
+    <div class="page-break"></div>
+
+    <h1>5. 推荐的导航层级设计</h1>
+    <p>为了后续后台不乱，建议统一采用：</p>
+
+    <h2>一级导航</h2>
+    <ul>
+        <li>总览</li>
+        <li>知识管理</li>
+        <li>审核发布</li>
+        <li>维护运营</li>
+        <li>检索调试</li>
+        <li>Agent 集成</li>
+        <li>平台配置</li>
+        <li>权限安全</li>
+    </ul>
+
+    <h2>二级导航示例</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>一级导航</th>
+                <th>二级导航</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>知识管理</strong></td>
+                <td>知识空间、我的知识、新建知识、导入中心、分类标签、模板管理</td>
+            </tr>
+            <tr>
+                <td><strong>审核发布</strong></td>
+                <td>待审核、审核记录、发布记录、版本中心</td>
+            </tr>
+            <tr>
+                <td><strong>维护运营</strong></td>
+                <td>维护任务、过期知识、反馈处理、质量分析、运营看板</td>
+            </tr>
+            <tr>
+                <td><strong>检索调试</strong></td>
+                <td>Query 测试、召回结果、重排分析、引用链路、失败问题分析、评测集</td>
+            </tr>
+            <tr>
+                <td><strong>Agent 集成</strong></td>
+                <td>Agent 列表、知识绑定、检索策略、Workflow 节点、调用监控、API 管理</td>
+            </tr>
+            <tr>
+                <td><strong>平台配置</strong></td>
+                <td>数据源、模型配置、词库配置、通知配置、系统设置</td>
+            </tr>
+            <tr>
+                <td><strong>权限安全</strong></td>
+                <td>用户与角色、权限策略、审计日志、合规配置</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+    <div class="page-break"></div>
+
+    <h1>6. 原型设计阶段的页面优先级</h1>
+    <p>不是所有页面都要同时画。建议按优先级推进。</p>
+
+    <h2><span class="priority-tag priority-p0">P0</span>第一批必须画</h2>
+    <p>这些页面会决定产品骨架：</p>
+    <ol>
+        <li>管理后台首页</li>
+        <li>知识空间管理页</li>
+        <li>新建知识页</li>
+        <li>知识详情编辑页</li>
+        <li>审核详情页</li>
+        <li>搜索结果页</li>
+        <li>知识详情页</li>
+        <li>Query 测试页</li>
+        <li>召回结果页</li>
+        <li>Agent 绑定知识空间页</li>
+        <li>Workflow 节点配置页</li>
+        <li>调用监控页</li>
+    </ol>
+
+    <h2><span class="priority-tag priority-p1">P1</span>第二批建议画</h2>
+    <ol>
+        <li>版本对比页</li>
+        <li>维护任务页</li>
+        <li>反馈处理页</li>
+        <li>质量分析页</li>
+        <li>检索策略配置页</li>
+        <li>API 管理页</li>
+    </ol>
+
+    <h2><span class="priority-tag priority-p2">P2</span>后续增强再画</h2>
+    <ol>
+        <li>多数据源同步页</li>
+        <li>高级权限页</li>
+        <li>自动标签与质量评分页</li>
+        <li>评测集管理高级页</li>
+    </ol>
+
+    <hr>
+    <div class="page-break"></div>
+
+    <h1>7. 当前版本的直接用途</h1>
+    <p>这份《功能架构图 + 用户角色图 + 页面地图》现在可以直接用于：</p>
+
+    <h2>用途一：进入低保真原型设计</h2>
+    <p>可以按五个端分别开始画框架页。</p>
+
+    <h2>用途二：拆 PRD 目录</h2>
+    <p>可以按：</p>
+    <ul>
+        <li>管理后台</li>
+        <li>运营工作台</li>
+        <li>调试台</li>
+        <li>业务端</li>
+        <li>Agent 端</li>
+    </ul>
+    <p>逐模块展开需求。</p>
+
+    <h2>用途三：拆研发任务</h2>
+    <p>可以按能力域分给不同角色：</p>
+    <ul>
+        <li>后台与权限</li>
+        <li>内容与审核</li>
+        <li>检索与调试</li>
+        <li>Agent 集成</li>
+        <li>运营分析</li>
+    </ul>
+
+    <hr>
+
+    <h1>8. 结论</h1>
+    <p>如果说上一份整体方案解决的是"做什么"，那这一份解决的是"系统骨架怎么搭"。</p>
+    
+    <div class="doc-intro">
+        <h3>💡 一句话总结</h3>
+        <p><strong>这个平台应该以"五端协同、六层能力、十个核心模块"为骨架，围绕知识治理与 Agent 服务双主线来组织产品结构。</strong></p>
+    </div>
+    
+    <p>这样往下继续做：</p>
+    <ul>
+        <li>原型图不会散</li>
+        <li>PRD 不会乱</li>
+        <li>字段设计不会脱节</li>
+        <li>Agent 联动展示也有清晰承载页面</li>
+    </ul>
+
+    <hr>
+
+    <h1>9. 建议的下一步</h1>
+    <p>最顺的下一步有两个：</p>
+
+    <h2>方案 A：继续做原型蓝图</h2>
+    <p>直接输出：</p>
+    <ul>
+        <li>管理后台原型蓝图</li>
+        <li>运营工作台原型蓝图</li>
+        <li>检索调试台原型蓝图</li>
+        <li>Agent 集成端原型蓝图</li>
+        <li>业务使用端原型蓝图</li>
+    </ul>
+
+    <h2>方案 B：继续做 PRD 总目录</h2>
+    <p>直接搭：</p>
+    <ul>
+        <li>PRD 总文档目录</li>
+        <li>一级模块需求清单</li>
+        <li>各页面需求项</li>
+        <li>状态机与校验点</li>
+    </ul>
+
+    <div class="tip-box">
+        如果你要效率最高，建议下一步直接做：<strong>《核心页面原型蓝图（低保真）》</strong><br>
+        因为现在平台骨架已经立好了，下一步就该把关键页面长出来。
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 15
+            },
+            sequence: {
+                useMaxWidth: true,
+                mirrorActors: false,
+                showSequenceNumbers: false
+            },
+            mindmap: {
+                useMaxWidth: true,
+                padding: 20
+            }
+        });
+    </script>
+</body>
+</html>

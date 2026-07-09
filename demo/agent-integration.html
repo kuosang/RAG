@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agent 集成端原型</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="agent-integration">
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <span class="hero-badge">Agent 集成端 · 接入编排端</span>
+          <h1>Agent 集成端</h1>
+          <p>用于演示 Agent 从知识绑定、检索策略、Prompt / 上下文编排，到 Workflow 节点、调用监控和接口接入的完整链路。页面重点突出 Agent 侧的配置联动，而不是把所有内容继续堆在知识库 demo 中。</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#agents">查看 Agent 列表</a>
+            <button class="btn ghost" data-publish-config type="button">模拟发布配置</button>
+            <a class="btn soft" href="./ops-workbench.html">切到知识运营工作台</a>
+          </div>
+          <div class="tag-row">
+            <span class="tag">Agent 列表 / 详情</span>
+            <span class="tag">知识绑定 / 检索策略</span>
+            <span class="tag">Prompt / 上下文策略 / Workflow</span>
+            <span class="tag">调用监控 / API Key / 引用展示</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <strong>接入导航</strong>
+          <span>聚焦 Agent 接入编排、联调和发布监控</span>
+        </div>
+        <nav class="side-nav">
+          <a class="nav-link active" href="#agents"><span>Agent 列表</span><span class="nav-kpi">7</span></a>
+          <a class="nav-link" href="#binding"><span>知识绑定配置</span><span class="nav-kpi">3</span></a>
+          <a class="nav-link" href="#strategy"><span>检索策略配置</span><span class="nav-kpi">0.78</span></a>
+          <a class="nav-link" href="#prompt"><span>Prompt / 上下文</span><span class="nav-kpi">4</span></a>
+          <a class="nav-link" href="#workflow"><span>Workflow 节点</span><span class="nav-kpi">6</span></a>
+          <a class="nav-link" href="#monitor"><span>调用监控</span><span class="nav-kpi">12.4k</span></a>
+          <a class="nav-link" href="#api"><span>接口文档 / Key</span><span class="nav-kpi">2</span></a>
+        </nav>
+        <div class="side-card">
+          <strong>灰度提醒</strong>
+          <div class="muted">- 客服助手命中稳定</div>
+          <div class="muted">- 产品顾问待发布</div>
+          <div class="muted">- 运营 Copilot 需补引用字段</div>
+          <button class="btn tiny primary" data-open-modal="create-agent" type="button">新建 Agent</button>
+        </div>
+      </aside>
+
+      <section class="content">
+        <section class="panel" id="agents">
+          <div class="panel-header">
+            <div>
+              <h2>Agent 列表</h2>
+              <div class="panel-subtitle">点击左侧 Agent 卡片可联动详情区，模拟接入负责人切换不同 Agent 进行配置与联调。</div>
+            </div>
+            <div class="toolbar-right">
+              <input class="input" id="agent-search" placeholder="搜索 Agent / 空间 / 负责人" style="width: 280px;" />
+              <button class="btn primary" data-open-modal="create-agent" type="button">新建 Agent</button>
+            </div>
+          </div>
+          <div class="split-stage">
+            <aside class="list">
+              <article class="list-item active" data-agent-card data-name="客服助手" data-owner="AI 产品经理" data-space="客服知识库" data-policy="混合检索 + 阈值兜底" data-status="运行中" data-status-class="success" data-desc="面向客服坐席的高频问答 Agent，强调标准答案引用与低分兜底。">
+                <div class="title-row"><strong>客服助手</strong><span class="status success">运行中</span></div>
+                <div class="meta-row"><span>绑定：客服知识库</span><span>负责人：AI 产品经理</span></div>
+              </article>
+              <article class="list-item" data-agent-card data-name="运营 Copilot" data-owner="知识运营" data-space="运营知识库" data-policy="语义检索 + Prompt 压缩" data-status="运行中" data-status-class="success" data-desc="支持活动运营问答、文案生成和规则解释，关注 Prompt 拼装和上下文精简。">
+                <div class="title-row"><strong>运营 Copilot</strong><span class="status success">运行中</span></div>
+                <div class="meta-row"><span>绑定：运营知识库</span><span>负责人：知识运营</span></div>
+              </article>
+              <article class="list-item" data-agent-card data-name="产品顾问" data-owner="平台管理员" data-space="产品知识库" data-policy="混合检索 + 强过滤" data-status="待发布" data-status-class="warning" data-desc="面向产品和研发的内部问答 Agent，规则严格，强调版本字段和引用链路。">
+                <div class="title-row"><strong>产品顾问</strong><span class="status warning">待发布</span></div>
+                <div class="meta-row"><span>绑定：产品知识库</span><span>负责人：平台管理员</span></div>
+              </article>
+              <article class="list-item" data-agent-card data-name="IT 服务 Agent" data-owner="IT 运营" data-space="IT 服务库" data-policy="全文检索 + SOP 优先" data-status="灰度中" data-status-class="info" data-desc="面向内部 IT 服务台，适合流程型知识和工单指引。">
+                <div class="title-row"><strong>IT 服务 Agent</strong><span class="status info">灰度中</span></div>
+                <div class="meta-row"><span>绑定：IT 服务库</span><span>负责人：IT 运营</span></div>
+              </article>
+            </aside>
+            <section class="content" style="gap:16px;">
+              <article class="card">
+                <div class="panel-header" style="margin-bottom:0;">
+                  <div>
+                    <h3 id="agent-name">客服助手</h3>
+                    <div class="panel-subtitle" id="agent-desc">面向客服坐席的高频问答 Agent，强调标准答案引用与低分兜底。</div>
+                  </div>
+                  <div class="toolbar-right">
+                    <span id="agent-status" class="status success">运行中</span>
+                    <button class="btn soft" type="button">保存配置</button>
+                    <button class="btn primary" data-publish-config type="button">发布配置</button>
+                  </div>
+                </div>
+                <div class="kv-grid" style="margin-top:16px;">
+                  <div class="kv-box"><label>负责人</label><div id="agent-owner">AI 产品经理</div></div>
+                  <div class="kv-box"><label>绑定空间</label><div id="agent-space">客服知识库</div></div>
+                  <div class="kv-box"><label>当前策略</label><div id="agent-policy">混合检索 + 阈值兜底</div></div>
+                  <div class="kv-box"><label>最近发布时间</label><div>2026-03-19 10:45</div></div>
+                </div>
+              </article>
+
+              <article class="panel" id="binding">
+                <div class="panel-header">
+                  <div>
+                    <h2>知识绑定配置</h2>
+                    <div class="panel-subtitle">支持多空间切换、知识类型约束、标签过滤与引用字段控制。</div>
+                  </div>
+                </div>
+                <div class="dual-grid">
+                  <article class="card">
+                    <div class="card-title"><strong>已绑定空间</strong><span class="badge success">当前生效</span></div>
+                    <div class="activity-list">
+                      <div class="activity-item"><div><strong id="binding-space">客服知识库</strong><div class="muted">主空间，FAQ / SOP 为主</div></div><span class="status success">主</span></div>
+                      <div class="activity-item"><div><strong>产品知识库</strong><div class="muted">作为规则补充，只读引用</div></div><span class="status info">辅</span></div>
+                    </div>
+                  </article>
+                  <article class="card">
+                    <div class="card-title"><strong>绑定规则</strong><span class="badge info">字段控制</span></div>
+                    <div class="kv-grid">
+                      <div class="kv-box"><label>知识类型</label><div>FAQ / SOP</div></div>
+                      <div class="kv-box"><label>标签过滤</label><div>#账号 #退款 #身份核验</div></div>
+                      <div class="kv-box"><label>引用字段</label><div>标题 / 来源 / 版本 / 更新时间</div></div>
+                      <div class="kv-box"><label>权限继承</label><div>空间级</div></div>
+                    </div>
+                  </article>
+                </div>
+              </article>
+
+              <article class="panel" id="strategy">
+                <div class="panel-header">
+                  <div>
+                    <h2>检索策略配置</h2>
+                    <div class="panel-subtitle">通过阈值滑块联动命中数与答案预览，模拟 Agent 在高可信和低可信场景下的输出差异。</div>
+                  </div>
+                  <div class="metric-row">
+                    <span class="badge info">当前命中数：<span id="agent-hit-count">2</span></span>
+                    <button class="btn tiny soft" id="preview-run" type="button">运行联调</button>
+                  </div>
+                </div>
+                <div class="preview-grid">
+                  <article class="card">
+                    <div class="card-title"><strong>检索配置</strong><span class="badge info">实时联动</span></div>
+                    <div class="pill-group" data-pill-group>
+                      <button class="pill active" data-pill type="button">混合检索</button>
+                      <button class="pill" data-pill type="button">语义检索</button>
+                      <button class="pill" data-pill type="button">全文检索</button>
+                    </div>
+                    <div class="slider-row" style="margin-top:16px;">
+                      <span class="badge info">MQA 阈值</span>
+                      <input id="agent-threshold" type="range" min="0.5" max="0.95" step="0.01" value="0.78" />
+                      <strong id="agent-threshold-value">0.78</strong>
+                    </div>
+                    <div class="score-list" style="margin-top:16px;">
+                      <div class="score-item active card" data-hit-score="0.91"><div><strong>账号重置流程 v4</strong><div class="muted">SOP · 客服知识库</div></div><strong>0.91</strong></div>
+                      <div class="score-item active card" data-hit-score="0.83"><div><strong>身份验证策略</strong><div class="muted">规则 · 产品知识库</div></div><strong>0.83</strong></div>
+                      <div class="score-item card" data-hit-score="0.74"><div><strong>忘记密码 FAQ</strong><div class="muted">FAQ · 客服知识库</div></div><strong>0.74</strong></div>
+                      <div class="score-item card" data-hit-score="0.62"><div><strong>异常登录处理说明</strong><div class="muted">FAQ · 安全库</div></div><strong>0.62</strong></div>
+                    </div>
+                  </article>
+                  <article class="card">
+                    <div class="card-title"><strong>引用展示预览</strong><span class="badge success">回答预演</span></div>
+                    <div id="preview-answer" class="preview-answer">
+                      <strong>生成回答（引用充足）</strong>
+                      <div>已命中高可信知识，建议返回标准答案 + 版本信息 + 处理步骤。</div>
+                      <blockquote>根据《账号重置流程 v4》和《身份验证策略》：请先校验 MFA，再引导用户进行密码重置。</blockquote>
+                    </div>
+                    <div class="kv-grid" style="margin-top:14px;">
+                      <div class="kv-box"><label>引用展示</label><div>标题 / 来源 / 更新时间</div></div>
+                      <div class="kv-box"><label>低分兜底</label><div>提示人工确认</div></div>
+                      <div class="kv-box"><label>证据链</label><div>开启</div></div>
+                      <div class="kv-box"><label>日志采样</label><div>10%</div></div>
+                    </div>
+                  </article>
+                </div>
+              </article>
+
+              <article class="panel" id="prompt">
+                <div class="panel-header">
+                  <div>
+                    <h2>Prompt / 上下文策略</h2>
+                    <div class="panel-subtitle">定义系统提示、知识注入顺序、低分回答兜底与多轮上下文截断规则。</div>
+                  </div>
+                </div>
+                <div class="dual-grid">
+                  <article class="card">
+                    <div class="card-title"><strong>系统策略</strong><span class="badge info">当前配置</span></div>
+                    <div class="timeline">
+                      <div class="timeline-item"><strong>回答原则</strong><div class="muted">优先引用标准答案，不足时明确说明不确定。</div></div>
+                      <div class="timeline-item"><strong>上下文长度</strong><div class="muted">保留最近 6 轮，优先保留用户限制条件。</div></div>
+                      <div class="timeline-item"><strong>角色提示</strong><div class="muted">客服场景下禁止生成主观承诺与超范围补偿。</div></div>
+                    </div>
+                  </article>
+                  <article class="card">
+                    <div class="card-title"><strong>注入顺序</strong><span class="badge warning">可调整</span></div>
+                    <div class="timeline">
+                      <div class="timeline-item"><strong>1. 用户问题</strong><div class="muted">识别意图和必要实体。</div></div>
+                      <div class="timeline-item"><strong>2. 检索结果</strong><div class="muted">按质量分和版本优先级注入。</div></div>
+                      <div class="timeline-item"><strong>3. 安全规则</strong><div class="muted">覆盖违规承诺与敏感输出约束。</div></div>
+                    </div>
+                  </article>
+                </div>
+              </article>
+
+              <article class="panel" id="workflow">
+                <div class="panel-header">
+                  <div>
+                    <h2>Workflow 节点配置</h2>
+                    <div class="panel-subtitle">展示 Agent 调用链路上的核心节点、输入输出字段与发布状态。</div>
+                  </div>
+                </div>
+                <div class="kanban">
+                  <div class="kanban-col">
+                    <h4>意图理解</h4>
+                    <div class="workflow-card"><strong>分类节点</strong><div class="muted">输入：query / history</div><span class="status success">生效中</span></div>
+                    <div class="workflow-card"><strong>实体提取</strong><div class="muted">输入：query / user_profile</div><span class="status success">生效中</span></div>
+                  </div>
+                  <div class="kanban-col">
+                    <h4>知识处理</h4>
+                    <div class="workflow-card"><strong>知识检索节点</strong><div class="muted">策略：混合检索 + 阈值</div><span class="status success">生效中</span></div>
+                    <div class="workflow-card"><strong>重排节点</strong><div class="muted">输出：top_k / citation_candidates</div><span class="status info">灰度中</span></div>
+                  </div>
+                  <div class="kanban-col">
+                    <h4>回答生成</h4>
+                    <div class="workflow-card"><strong>答案润色节点</strong><div class="muted">引用优先，低分触发兜底</div><span class="status warning">草稿</span></div>
+                    <div class="workflow-card"><strong>引用渲染节点</strong><div class="muted">输出：title / version / source</div><span class="status success">生效中</span></div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="panel" id="monitor">
+                <div class="panel-header">
+                  <div>
+                    <h2>调用监控</h2>
+                    <div class="panel-subtitle">查看调用量、命中率、引用率、失败率，以及单次 Query 的链路定位信息。</div>
+                  </div>
+                </div>
+                <div class="metric-grid">
+                  <div class="metric"><strong>调用量</strong><div class="kpi-value" style="font-size:26px;">12,430</div><div class="muted">近 24h</div></div>
+                  <div class="metric"><strong>命中率</strong><div class="kpi-value" style="font-size:26px;">79%</div><div class="muted">较昨日 +2%</div></div>
+                  <div class="metric"><strong>引用率</strong><div class="kpi-value" style="font-size:26px;">62%</div><div class="muted">高可信回答占比提升</div></div>
+                  <div class="metric"><strong>失败率</strong><div class="kpi-value" style="font-size:26px;">3.1%</div><div class="muted">主要来自低分兜底</div></div>
+                </div>
+                <div class="table-wrap" style="margin-top:14px;">
+                  <table>
+                    <thead>
+                      <tr><th>时间</th><th>Query</th><th>命中数</th><th>耗时</th><th>状态</th><th>链路</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>10:20</td><td>如何重置密码？</td><td>3</td><td>1.2s</td><td><span class="status success">成功</span></td><td><button class="btn tiny soft" type="button">查看链路</button></td></tr>
+                      <tr><td>10:18</td><td>退款多久到账</td><td>1</td><td>1.8s</td><td><span class="status warning">低分</span></td><td><button class="btn tiny primary" type="button">去调优</button></td></tr>
+                      <tr><td>10:11</td><td>发票抬头怎么改</td><td>0</td><td>0.9s</td><td><span class="status danger">零结果</span></td><td><button class="btn tiny soft" type="button">补知识</button></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article class="panel" id="api">
+                <div class="panel-header">
+                  <div>
+                    <h2>接口文档 / API Key</h2>
+                    <div class="panel-subtitle">提供接入方所需的 Key、示例接口与环境说明，支持复制与重置操作。</div>
+                  </div>
+                </div>
+                <div class="dual-grid">
+                  <article class="card">
+                    <div class="card-title"><strong>API Key</strong><span class="badge warning">生产环境</span></div>
+                    <div class="preview-answer">
+                      <strong id="api-key-value">kb_agent_2026_03_19_a7k***</strong>
+                      <div>用于服务端调用，建议按业务线拆分 Key 并定期轮换。</div>
+                    </div>
+                    <div class="drawer-actions">
+                      <button class="btn soft" data-copy="kb_agent_2026_03_19_a7k***" data-copy-success="API Key 已复制" type="button">复制 Key</button>
+                      <button class="btn primary" id="rotate-key" type="button">重置 Key</button>
+                    </div>
+                  </article>
+                  <article class="card">
+                    <div class="card-title"><strong>接口示例</strong><span class="badge info">POST /rag/query</span></div>
+                    <div class="timeline">
+                      <div class="timeline-item"><strong>请求参数</strong><div class="muted">query / agent_id / mqa_threshold / show_citation</div></div>
+                      <div class="timeline-item"><strong>返回字段</strong><div class="muted">answer / citations / confidence / trace_id</div></div>
+                      <div class="timeline-item"><strong>联调建议</strong><div class="muted">灰度阶段记录 `trace_id`，便于回放调用链路。</div></div>
+                    </div>
+                  </article>
+                </div>
+              </article>
+            </section>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <div class="modal-overlay" data-modal="create-agent">
+    <div class="modal">
+      <h3>新建 Agent</h3>
+      <div class="panel-subtitle">模拟配置 Agent 名称、知识空间和默认检索策略，产出一套初始接入方案。</div>
+      <div class="form-grid" style="margin-top:14px;">
+        <div><input class="input" value="售后协同 Agent" /></div>
+        <div><select class="select"><option>客服知识库</option><option>产品知识库</option></select></div>
+        <div><select class="select"><option>混合检索</option><option>语义检索</option></select></div>
+        <div><input class="input" value="负责人：AI 产品经理" /></div>
+        <div class="full"><textarea class="textarea">请优先引用知识库中的标准答案。当可信度不足时，提示用户转人工并展示可选参考知识。</textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn soft" data-close-modal type="button">取消</button>
+        <button class="btn primary" data-close-modal type="button">创建 Agent</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-note" id="floating-note"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
